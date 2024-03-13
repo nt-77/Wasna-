@@ -154,6 +154,20 @@ const MenuSchema = mongoose.Schema(
     ],
   });
 
+  const CustumMenuSchema = mongoose.Schema(
+    {
+    title: String,
+    category: String,
+    description: String,
+    price: Number,
+    items: [
+        {
+          item_type: String,
+          option:[String],
+        },
+    ],
+  });
+
     // //when storing one image in the database
     // const imageSchema = new mongoose.Schema({
     //     filename: String,
@@ -166,4 +180,5 @@ export const Book= mongoose.model('book', bookSchema)       //creating book mode
 export const User= mongoose.model('user', userSchema)       //creating book model for database
 export const Decor= mongoose.model('decor', decorSchema)       //creating book model for database
 export const Menu= mongoose.model('menu', MenuSchema)       //creating book model for database
+export const CustomMenu= mongoose.model('customMenu', CustumMenuSchema)       //creating book model for database
 // export const Image= mongoose.model('image', imageSchema)       //creating book model for database

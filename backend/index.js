@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import bookRoute from './routes/bookRoute.js'
 import UserRoute from './routes/userRoute.js'
 import MenuSchema from  './routes/menuRoute.js'
+import CustomMenuRoute from './routes/customMenuRoute.js'
 import decorInventoryRoute from './routes/decorInventoryRoute.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
@@ -34,6 +35,7 @@ app.use('/decor', decorInventoryRoute)
 app.use('/api/user', UserRoute)
 app.use('/books', bookRoute)
 app.use('/menu',MenuSchema)
+app.use('/customMenu',CustomMenuRoute )
 
 
 app.get('/',async(req,res)=>{
