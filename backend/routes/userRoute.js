@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import 'dotenv/config';
 import bycrypt from 'bcryptjs'
 import protect from '../middleWare/authMiddleWare.js';
-
+import nodemailer from'nodemailer';
 // import {JWT_SECRET} from '../config.js'
 // import {User} from '../models/models.js'
 const router=express.Router()
@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
         const userExists= await User.findOne({ email: email})
 
         if(userExists){
-            return res.status(400).send({ message: 'user with the provided email is alresdy registered' });
+            return res.status(402).send({ message: 'user with the provided email is alresdy registered' });
 
         }
 
@@ -56,12 +56,11 @@ router.post('/register', async (req, res) => {
             console.log(token);
         
         if(user){
-            const {_id, name, email, photo, bio}=user;
+            const {_id, name, email, bio}=user;
             const registeredUser={
                 _id,
                 name, 
                 email, 
-                photo, 
                 bio,
                 token,
             }
@@ -98,11 +97,11 @@ router.post('/login',async (req,res)=>{
 
         //generate HTTP-only cookie
         res.cookie('token', token,{
-            path:'/',
+            // path:'/',
             httpOnly:true,
-            expires: new Date(Date.now() + 1000* 86400),
-            sameSite:'none',
-            secure:true
+            // expires: new Date(Date.now() + 1000* 86400),
+            // sameSite:'none',
+            // secure:false
         })
 
         if (user && correctPassword) {
@@ -131,7 +130,7 @@ router.get('/logout',async (req,res)=>{
     try {
         //generate HTTP-only cookie
         res.cookie('token', "",{
-            path:'/',
+            // path:'/',
             httpOnly:true,
             expires: new Date(0),
             sameSite:'none',
@@ -157,12 +156,11 @@ router.get('/getuser',protect, async (req, res)=>{
         const user=req.user;
 
         if(user){
-            const {_id, name, email, photo, bio}=user;
+            const {_id, name, email, bio}=user;
             const registeredUser={
                 _id,
                 name, 
                 email, 
-                photo, 
                 bio,
             }
             return res.status(201).send(registeredUser);
@@ -176,12 +174,12 @@ router.patch('/updateuser',protect,async (req,res)=>{
     try {
         const user=req.user;
         console.log(user);
-        const { _id,name, email, photo, bio}=user;
+        const { _id,name, email, bio}=user;
 
         if(user){
             user.email=email;
             user.name= req.body.name || name;
-            user.photo= req.body.photo || photo;
+            // user.photo= req.body.photo || photo;
             user.bio= req.body.bio || bio;
         }
 
@@ -231,8 +229,96 @@ router.patch('/changepassword',protect, async (req, res) => {
     }
 })
 
+const transporter = nodemailer.createTransport({
+    host: "sandbox.smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "a65f8683cfbf43",
+      pass: "74a829aa646bb2"
+    }
+  });
+
+
 router.post('/forgotpassword',async(req, res)=>{
-    res.send("Forgot your password")
-})
+    try {
+        const { email } = req.body;
+
+        // Check if user with provided email exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: "User with the provided email could not be found" });
+        }
+
+        const token=generateToken(user._id)
+
+        console.log("Generated token:", token); // Log the generated token
+        const expirationTime = 3600000; // 1 hour in milliseconds
+        user.resetPasswordToken = token;
+        user.resetPasswordTokenExpires = Date.now() + expirationTime;
+        await user.save();
+
+        console.log("User saved:", user); // Log the saved user
+
+        // Compose email message
+        const mailOptions = {
+            from: "Your Name <your-email@example.com>",
+            to: email,
+            subject: "Password Reset Instructions",
+            // text: `To reset your password, click on the following link:/resetpassword?token=${token}`,
+            html: `To reset your password, click on the following link: <a href="${process.env.DOMAIN}/resetpassword?token=${token}">${process.env.DOMAIN}/resetpassword?token=${token}</a>`,
+        };
+
+        // Send email
+        await transporter.sendMail(mailOptions);
+
+        console.log("Password reset instructions sent"); // Log password reset instructions sent
+
+        // Return success response
+        return res.json({ message: "Password reset instructions sent to your email." });
+    } catch (error) {
+        console.error("Forgot password failed", error.message);
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+router.post('/resetpassword', async (req, res) => {
+
+    try {
+        const { token, newPassword } = req.body;
+
+        console.log(token);
+        console.log(newPassword);
+        // Validate token and find user. This part depends on how you've implemented token generation and storage.
+        // For the sake of this example, let's assume the token is stored in the user document and you have a method to validate it.
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordTokenExpires: { $gt: Date.now() }
+        });
+        console.log(user);
+
+        if (!user) {
+            return res.status(400).json({ error: "Invalid or expired password reset token." });
+        }
+
+        // Update user's password and clear the reset token
+        user.password = newPassword;
+                //generate HTTP-only cookie
+                res.cookie('token', user.resetPasswordToken,{
+                    path:'/',
+                    httpOnly:true,
+                    expires: new Date(Date.now() + 1000* 86400),
+                    sameSite:'none',
+                    secure:false
+                })
+        user.resetPasswordToken = null; // Or null, to clear the token
+                
+        await user.save();
+        // Respond to the request
+        res.json({ message: "Password has been reset successfully." });
+    } catch (error) {
+        console.error("Password reset failed", error.message);
+        res.status(500).json({ error: "An error occurred while resetting the password." });
+    }
+});
 // module.exports=router;
 export default router;

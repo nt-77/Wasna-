@@ -156,23 +156,41 @@ const EachCustomize = ({ category, menu, items, onSelectionChange }) => {
   );
 
   return (
-    <div key={items._id}>
-      <h1>{items.item_type}</h1>
-      {items.options.map((option, index) => (
-        <label key={index} className="inline-flex items-center p-3">
-          <input
-            type={["Salad", "Dessert", "Sauce"].includes(items.item_type) ? "checkbox" : "radio"}
-            name={items.item_type}
-            className="form-checkbox text-blue-500"
-            value={option}
-            checked={selectedOptions.includes(option)}
-            onChange={() => handleOptionChange(option)}
-            disabled={isSelectionDisabled(items.item_type)} // Disable changes based on the conditions
-          />
-          <span className="ml-2">{option}</span>
-        </label>
-      ))}
-    </div>
+    // <div key={items._id}>
+    //   <h1>{items.item_type}</h1>
+    //   {items.options.map((option, index) => (
+    //     <label key={index} className="inline-flex items-center p-3">
+    //       <input
+    //         type={["Salad", "Dessert", "Sauce"].includes(items.item_type) ? "checkbox" : "radio"}
+    //         name={items.item_type}
+    //         className="form-checkbox text-blue-500"
+    //         value={option}
+    //         checked={selectedOptions.includes(option)}
+    //         onChange={() => handleOptionChange(option)}
+    //         disabled={isSelectionDisabled(items.item_type)} // Disable changes based on the conditions
+    //       />
+    //       <span className="ml-2">{option}</span>
+    //     </label>
+    //   ))}
+    // </div>
+    <div key={items._id} className="text-center">
+  <h1 className="font-bold">{items.item_type}</h1>
+  {items.options.map((option, index) => (
+    <label key={index} className="inline-flex items-center p-3">
+      <input
+        type={["Salad", "Dessert", "Sauce"].includes(items.item_type) ? "checkbox" : "radio"}
+        name={items.item_type}
+        className="form-checkbox text-blue-500"
+        value={option}
+        checked={selectedOptions.includes(option)}
+        onChange={() => handleOptionChange(option)}
+        disabled={isSelectionDisabled(items.item_type)} // Disable changes based on the conditions
+      />
+      <span className="ml-2">{option}</span>
+    </label>
+  ))}
+</div>
+
   );
 };
 

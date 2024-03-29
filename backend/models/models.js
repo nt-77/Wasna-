@@ -30,7 +30,7 @@ const userSchema =mongoose.Schema(
         },
         email:{
             type:String,
-            required:[true, 'please add a email'],
+            required:[true, 'please add an email'],
             unique:true,
             trim:true,
             match:[
@@ -43,17 +43,19 @@ const userSchema =mongoose.Schema(
             required:[true, 'please add a password'],
             minLength:[6,"please enter a password of atleast 6 characters" ]
         },
-        bio:{
-            type:String,
-            // required:[true, 'please add bio'],
-            default:"bio",
-            maxLength:[250, "bio must not be more then 250 characters"]
-        },
-        photo:{
-            type:String,
-            required:[true, 'please add a photo'],
-            default:"https://i.ibb.co/4pDNDk1/avatar.png",
-        },
+        // bio:{
+        //     type:String,
+        //     // required:[true, 'please add bio'],
+        //     default:"bio",
+        //     maxLength:[250, "bio must not be more then 250 characters"]
+        // },
+        // photo:{
+        //     type:String,
+        //     required:[true, 'please add a photo'],
+        //     default:"https://i.ibb.co/4pDNDk1/avatar.png",
+        // },
+        resetPasswordToken: {type:String,},
+resetPasswordTokenExpires: {type:Date},
 
     },
     {
@@ -74,30 +76,49 @@ const userSchema =mongoose.Schema(
 
 
 
-    const decorSchema =mongoose.Schema(
+    // const decorSchema =mongoose.Schema(
+    //     {
+    //         category: {
+    //             type: String,
+    //             required: [true, 'please add a Category'],
+    //           },
+    //           images: {
+    //             type: String,
+    //             },
+    //             img_url:{
+    //                 type: String,
+    //             }
+              
+    //         },
+    //     {
+    //         timestamps:true
+    //     }
+    // )
+
+    const decorSchema = mongoose.Schema(
         {
-            name: {
-                type: String,
-                required: [true, 'please add a name'],
-              },
-              item_type: {
-                type: String,
-                required: [true, 'please add the item type'],
-              },
-              quantity: {
-                type: Number,
-                required: [true, 'please add total quantity'],
-              },
-              image: {
-                filename: String,
-                contentType: String,
-                data: String,
-              }
+          category: {
+            type: String,
+            required: [true, 'Please add a category'],
+          },
+          price: {
+            type: Number,
+            required: [true, 'Please add a price'],
+          },
+          images: [{
+            img_url: {
+              type: String,
             },
+            imageName: {
+              type: String,
+            },
+          }],
+        },
         {
-            timestamps:true
+          timestamps: true
         }
-    )
+      );
+
     const CateringSchema =mongoose.Schema(
         {
             name: {
@@ -163,7 +184,7 @@ const MenuSchema = mongoose.Schema(
     items: [
         {
           item_type: String,
-          option:[String],
+          options:[String],
         },
     ],
   });

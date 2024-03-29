@@ -236,5 +236,99 @@ some code for further use:
 
             export default App;
 
+input for menu:  "items": [
+    {
+      "item_type": "Rice",
+          "options": [
+            "Chicken Pulao",
+            "Chicken Biryani"
+          ]
+          
+      
+    },
+    {
+      "item_type": "Mutton Gravy",
+      "options": [
+"Mutton Qorma",
+"Mutton White Qorma",
+"Mutton Karahi"
+      ]
+        
+    },    {
+      "item_type": "Chicken Gravy",
+      "options": [
+"Chicken Jalfrezi",
+"Chicken White Karahi"
+      ]
+        
+    },
+        {
+      "item_type": "Kabab",
+      "options": [
+"Reshmi Seekh Kabab",
+"Gola Kabab"
+      ]
+        
+    },
+       {
+      "item_type": "Chicken Dry Item",
+      "options": [
+"Chicken Boti (BBQ)",
+"Chicken Steam Roast"
+      ]
+        
+    },
+    {
+      "item_type": "Salad",
+      "options": [
+"Russian Salad",
+"Fresh Green Salad",
+"Apple Cabbage Salad",
+"Chicken Pineapple Salad",
+"Macaroni Salad",
+"Creamy Pasta Salad"
+      ]
+        
+      
+    },
+    {
+      "item_type": "Dessert",
+      "options": 
+       [ "Kheer",
+       "Fruite Trifle"
+       ]
+      
+    },
+    {
+      "item_type": "Roghni Naan",
+    "options": [
+      ]
+    },    {
+      "item_type": "Sauce",
+    "options": [
+        "Raita",
+        "Mint Sauce"
+      ]
+    },
+    {
+      "item_type": "Tea",
+    "options": [
+"Green Tea",
+"Pink Tea" 
+      ]
+    },{
+      "item_type": "Soft Drinks",
+    "options": [
 
+      ]
+    },
+    {
+      "item_type": "Mineral Water",
+          "options": [
+      ]
+    }
+  ]
             
+
+Access key:AKIAQ3EGPBJMLZFW4U6W
+secret key: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

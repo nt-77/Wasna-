@@ -22,7 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:5173', // Replace with your frontend origin
+    credentials: true,
+}))
 //for custom origins
 // app.use(cors({
 //     origin:'http://localhost:5000',

@@ -61,5 +61,57 @@ const router=express.Router()
               res.status(500).send({message:error.message});
           }
       })
+ // Update a menu in the db
+// Update a menu in the db
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const item = await Menu.findById(id);
+
+    if (!item) {
+      return res.status(404).send({ message: 'Item not found' });
+    }
+
+    item.title = req.body.title || item.title;
+    item.category = req.body.category || item.category;
+    item.description = req.body.description || item.description;
+    item.price = req.body.price || item.price;
+
+    // Iterate through the items array in the request body and update each item in the database
+    if (req.body.items && req.body.items.length > 0) {
+      req.body.items.forEach((newItem) => {
+        const existingItem = item.items.find((i) => i.item_type === newItem.item_type);
+        if (existingItem) {
+          existingItem.options = newItem.options;
+        } else {
+          item.items.push(newItem);
+        }
+      });
+    }
+
+    const result = await item.save();
+    return res.status(200).send({ message: 'Item updated successfully' });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: error.message });
+  }
+});
+
+    //delete menu from database
+    router.delete('/:id',async(req,res)=>{
+      try {
+          const {id}=req.params;
+  const deleteBook= await Menu.findByIdAndDelete(id)
+  if(!deleteBook){
+      return res.status(404).send({message:'Menu not found'})
+  }
+  return res.status(200).send({message:'menu deleted successfuly'})
+  
+      } catch (error) {
+          console.log(error);
+          return res.status(500). send({message:error.messsage})
+      }
+  })
 
     export default router;

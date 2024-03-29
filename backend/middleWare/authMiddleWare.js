@@ -4,8 +4,9 @@ import jwt from 'jsonwebtoken';
 
 const protect = async (req, res, next) => {
     try {
+        // const token = req.cookies.token;
         const token = req.cookies.token;
-
+        console.log(token); 
         // Check if the user has a token (is logged in or not)
         if (!token) {
             return res.status(401).send({ message: 'User not authorized, please login' });

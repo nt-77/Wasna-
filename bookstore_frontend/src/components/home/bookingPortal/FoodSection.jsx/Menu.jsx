@@ -16,7 +16,7 @@ const Menu = ({ items, showMenuCustomization, setMenuCustomization,setCustomizeM
               />
        
       ) : (
-        <div className="section-center flex gap-8 max-w-[var(--max-width)] w-90vw mx-auto justify-center">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 justify-center gap-8 max-w-[var(--max-width)] w-90vw mx-auto p-5">
         {items.map((menuItem) => (
           <MenuItem
             key={menuItem._id}
@@ -33,3 +33,4 @@ const Menu = ({ items, showMenuCustomization, setMenuCustomization,setCustomizeM
 };
 
 export default Menu;
+// flex gap-8 max-w-[var(--max-width)] w-90vw mx-auto 
