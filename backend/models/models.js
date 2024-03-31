@@ -189,6 +189,26 @@ const MenuSchema = mongoose.Schema(
     ],
   });
 
+
+  
+  const EventSchema = new mongoose.Schema({
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    customMenus: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'CustomMenu'
+    }, // Embed custom menus directly
+    decor: {
+      category: String,
+      price: Number,
+    },
+    venue: String,
+    // ... other event details
+  }, { timestamps: true });
+
     // //when storing one image in the database
     // const imageSchema = new mongoose.Schema({
     //     filename: String,
@@ -202,4 +222,5 @@ export const User= mongoose.model('user', userSchema)       //creating book mode
 export const Decor= mongoose.model('decor', decorSchema)       //creating book model for database
 export const Menu= mongoose.model('menu', MenuSchema)       //creating book model for database
 export const CustomMenu= mongoose.model('customMenu', CustumMenuSchema)       //creating book model for database
+export const Event= mongoose.model('event', EventSchema)       //creating book model for database
 // export const Image= mongoose.model('image', imageSchema)       //creating book model for database

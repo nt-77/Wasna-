@@ -6,6 +6,7 @@ import UserRoute from './routes/userRoute.js'
 import MenuSchema from  './routes/menuRoute.js'
 import CustomMenuRoute from './routes/customMenuRoute.js'
 import decorInventoryRoute from './routes/decorInventoryRoute.js'
+import eventRoute from './routes/eventRoute.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
@@ -39,6 +40,7 @@ app.use('/api/user', UserRoute)
 app.use('/books', bookRoute)
 app.use('/menu',MenuSchema)
 app.use('/customMenu',CustomMenuRoute )
+app.use('/event',eventRoute )
 
 
 app.get('/',async(req,res)=>{
