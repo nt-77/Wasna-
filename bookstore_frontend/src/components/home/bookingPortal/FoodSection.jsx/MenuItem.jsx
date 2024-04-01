@@ -7,11 +7,13 @@ const MenuItem = ({
   items,
   setMenuCustomization,
   setCustomizeMenuId,
+  customMenu
 }) => {
   const handleClick = (_id) => {
     setMenuCustomization(true);
     setCustomizeMenuId(_id);
-    console.log(_id);
+    console.log("custom" , _id)
+    customMenu(_id)
   };
   return (
     <>

@@ -5,11 +5,13 @@ import axios from "axios";
 import Categories from "./FoodSection.jsx/Categories";
 import Title from "./FoodSection.jsx/Title";
 import Menu from "./FoodSection.jsx/Menu";
+import Step3 from "./Step3";
 
-const Step2 = ({ data, handleChange, nextStep, prevStep }) => {
+const Step2 = ({ data, handleChange, nextStep, prevStep,customMenu ,setDecor}) => {
   const [categories, setCategories] = useState([]);
   const [showMenuCustomization, setMenuCustomization] = useState(false);
   const [customizeMenuId, setCustomizeMenuId] = useState([]);
+  const [isCustomized, setIsCustomized] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
@@ -52,17 +54,18 @@ const Step2 = ({ data, handleChange, nextStep, prevStep }) => {
 
   return (
     <div>
-      <h2>Step 2: Decor Selection</h2>
+
       {loading ? (
         <Spinner />
       ) : (
+        isCustomized? (<Step3 setDecor={setDecor}/>): 
+        (        
         <section>
+                <h2>Step 2: Decor Selection</h2>
           <Title text="our menu" />
           <Categories categories={categories} filterItems={filterItems}  setMenuCustomization={setMenuCustomization}/>
-          <Menu items={filteredMenuItems} showMenuCustomization={showMenuCustomization} setMenuCustomization={setMenuCustomization} setCustomizeMenuId={setCustomizeMenuId} customizeMenuId={customizeMenuId}/>
-        </section>
-      )}
-      <div className="flex justify-between p-5">
+          <Menu setIsCustomized={setIsCustomized} items={filteredMenuItems} showMenuCustomization={showMenuCustomization} setMenuCustomization={setMenuCustomization} setCustomizeMenuId={setCustomizeMenuId} customizeMenuId={customizeMenuId} customMenu={customMenu}/>
+          <div className="flex justify-between p-5">
         <button
           onClick={prevStep}
           className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
@@ -76,6 +79,10 @@ const Step2 = ({ data, handleChange, nextStep, prevStep }) => {
           Next
         </button>
       </div>
+        </section>)
+
+      )}
+
     </div>
   );
 };

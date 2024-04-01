@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MenuItem from "./MenuItem";
 import MenuCustomization from "./MenuCustomization";
 
-const Menu = ({ items, showMenuCustomization, setMenuCustomization,setCustomizeMenuId ,customizeMenuId}) => {
+const Menu = ({setIsCustomized, customMenu,items, showMenuCustomization, setMenuCustomization,setCustomizeMenuId ,customizeMenuId}) => {
   // const [selectedMenu, setSelectedMenue] = useState([]);
   const filteredItems = items.filter(item => item._id === customizeMenuId); 
   console.log(filteredItems);
@@ -12,6 +12,7 @@ const Menu = ({ items, showMenuCustomization, setMenuCustomization,setCustomizeM
                 <MenuCustomization
                 selectedMenu={filteredItems}
                 setMenuCustomization={setMenuCustomization}
+                setIsCustomized={setIsCustomized}
                 // customizeMenuId={customizeMenuId}
               />
        
@@ -24,6 +25,7 @@ const Menu = ({ items, showMenuCustomization, setMenuCustomization,setCustomizeM
             setMenuCustomization={setMenuCustomization}
             setSelectedMenu={(menuItem) => setSelectedMenue(menuItem)}
             setCustomizeMenuId={setCustomizeMenuId}
+            customMenu={customMenu}
           />
         ))}
       </div>

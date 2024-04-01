@@ -6,9 +6,10 @@ import Packages from './decorSection.jsx/Packages';
 import Title from "./FoodSection.jsx/Title";
 import Decor from './decorSection.jsx/Decor';
 
-const Step3 = ({ data, handleChange, prevStep }) => {
+const Step3 = ({ data, handleChange, prevStep,setDecor }) => {
 
   const [categories, setCategories] = useState([]);
+  // console.log("decor onstep 3",decor);
 
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +24,7 @@ const Step3 = ({ data, handleChange, prevStep }) => {
       .then((response) => {
         const decorData = response.data.data;
         setFilteredMenuItems(decorData);
-        console.log("flter",filteredMenuItems);
+        // console.log("flter",filteredMenuItems);
         setMenuItems(decorData);
         const allCategories = [
           ...new Set(decorData.map((item) => item.category)),
@@ -51,7 +52,7 @@ const Step3 = ({ data, handleChange, prevStep }) => {
   useEffect(() => {
     console.log("Categories:", categories);
   }, [categories]);
-  console.log("filtered items",filteredMenuItems);
+  // console.log("filtered items",filteredMenuItems);
   const decor_items=filteredMenuItems[0]
   console.log("decor_items",decor_items);
 
@@ -65,7 +66,7 @@ const Step3 = ({ data, handleChange, prevStep }) => {
         <section>
           <Title text="our decor packages" />
           <Packages categories={categories} filterItems={filterItems} />
-          <Decor items={decor_items} />
+          <Decor items={decor_items} setDecor={setDecor}/>
 
           {/* <Menu items={filteredMenuItems} showMenuCustomization={showMenuCustomization} setMenuCustomization={setMenuCustomization} setCustomizeMenuId={setCustomizeMenuId} customizeMenuId={customizeMenuId}/> */}
         </section>

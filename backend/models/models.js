@@ -205,7 +205,7 @@ const MenuSchema = mongoose.Schema(
       category: String,
       price: Number,
     },
-    venue: String,
+    // venue: String,
     // ... other event details
   }, { timestamps: true });
 

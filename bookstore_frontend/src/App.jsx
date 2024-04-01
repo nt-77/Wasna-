@@ -56,6 +56,7 @@ import ChangePassword from './pages/users/ChangePassword';
 import RegisterUser from './pages/users/RegisterUser'
 import ForgotPassword from './pages/users/ForgotPassword';
 import ResetPassword from './pages/users/ResetPassword';
+import Step3 from './components/home/bookingPortal/Step3'
 import Home from './pages/Home'
 
 
@@ -101,6 +102,7 @@ function App() {
           <Route path="/fetchuser" element={<PrivateRoute><GetUser /></PrivateRoute>} />
           <Route path="/bookingPortal" element={<PrivateRoute><BookingForm /></PrivateRoute>} />
           <Route path="/UpdateUserProfile" element={<PrivateRoute><UpdateUserProfile /></PrivateRoute>} />
+          <Route path='/bookingPortal/decor' element={<PrivateRoute><Step3/></PrivateRoute>}/>
           <Route path="/changeUserPassword" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
           {/* Add more routes as needed */}
           <Route path="/" element={<Home />} />

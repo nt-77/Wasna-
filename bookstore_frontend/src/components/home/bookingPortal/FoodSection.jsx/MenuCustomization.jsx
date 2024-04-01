@@ -91,8 +91,9 @@ import axios from "axios";
 import EachCustomize from "./EachCustomize";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import Step3 from "../Step3";
 
-const MenuCustomization = ({ selectedMenu }) => {
+const MenuCustomization = ({ selectedMenu ,setIsCustomized}) => {
   const [selections, setSelections] = useState({});
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -140,7 +141,8 @@ const MenuCustomization = ({ selectedMenu }) => {
       await axios.post("http://localhost:5000/customMenu", customizedMenuData);
       enqueueSnackbar('Menu customized successfully', { variant: 'success' });
       // Use navigate to redirect after successful customization
-      navigate("/bookingPortal/decor"); // Adjust "/success-route" as needed
+      // navigate("/bookingPortal/decor"); // Adjust "/success-route" as needed
+      setIsCustomized(true); 
     } catch (error) {
       console.error(error);
       enqueueSnackbar('Could not customize menu', { variant: 'error' });
@@ -148,7 +150,7 @@ const MenuCustomization = ({ selectedMenu }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-8 shadow-lg py-4 m-4">
+  <div className="max-w-md mx-auto my-8 shadow-lg py-4 m-4">
       <h2 className="text-3xl  mb-4 text-center ">Customizing {selectedMenu[0].title}</h2>
       <form>
         {selectedMenu[0].items.map((item) => (
@@ -162,8 +164,9 @@ const MenuCustomization = ({ selectedMenu }) => {
         ))}
         <button type="button" onClick={handleConfirm} className="block mx-auto bg-blue-400 text-white py-2 px-6 rounded-md rounded hover:bg-blue-600 m-8" >Confirm</button>
       </form>
-    </div>
-  );
+    
+    </div>)
+
 };
 
 export default MenuCustomization;

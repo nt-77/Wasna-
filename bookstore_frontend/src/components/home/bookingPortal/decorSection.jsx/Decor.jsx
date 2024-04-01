@@ -1,11 +1,16 @@
 import React from "react";
 import DecorItem from "./DecorItem";
 
-const Decor = ({ items }) => {
+const Decor = ({ items ,setDecor,decor}) => {
 console.log("items",items);
-
+console.log("decor on decor page",decor);
     const handleClick = ()=>{
-
+     const  selectedDecor=({
+        category: items.category,
+        price:items.price
+      })
+      setDecor(selectedDecor)
+      console.log("selected decor",selectedDecor);
     } 
   return (
     <div className="">
@@ -13,13 +18,13 @@ console.log("items",items);
       {/* {items.map((decorItem) => { */}
         <DecorItem  item={items} />;
       {/* })} */}
-{/* 
+
       <button 
       type='button'
-      onClick={() => handleClick(category)}
+      onClick={() => handleClick()}
       className="hover:bg-blue-600 rounded px-4 py-2 bg-blue-400 text-white ">
         click me
-      </button> */}
+      </button>
     </div>
   );
 };
