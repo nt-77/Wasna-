@@ -64,28 +64,52 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import forgotPassword from "../../assets/forgot_password.svg";
 import { RiLockPasswordLine } from "react-icons/ri";
-
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const ResetPassword = () => {
+    
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
     const [newPassword, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
 
+        const getTokenFromUrl = () => {
+        return new URLSearchParams(location.search).get('token');
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (newPassword !== confirmPassword) {
-            setMessage('Passwords do not match.');
+            // setMessage('Passwords do not match.');
+            enqueueSnackbar("Passwords do not match", { variant: "warning" });
+            return;
+        }
+        if (newPassword.length < 6 || confirmPassword.length< 6) {
+            // setMessage('Passwords do not match.');
+            enqueueSnackbar("password must be atleast 6 characters", { variant: "warning" });
             return;
         }
 
         try {
-            // Replace 'getTokenFromUrl' with actual logic to retrieve the token
-            const token = "your-token-retrieval-logic";
+           
+            const token = getTokenFromUrl();
             await axios.post('http://localhost:5000/api/user/resetpassword', { token, newPassword }, { withCredentials: true });
-            setMessage('Your password has been successfully reset.');
+            if (newPassword < 6 || confirmPassword < 6) {
+                // setMessage('Passwords do no<6t match.');
+                return;
+            }
+    
+        enqueueSnackbar("Your password has been successfully reset", { variant: "success" });
+        navigate("/bookingPortal");
+
+            // setMessage('Your password has been successfully reset.');
         } catch (error) {
-            setMessage('Failed to reset password. Please try again.');
+            enqueueSnackbar(`Error:  ${error.response.data.message}`, {
+                variant: "error",
+              });
+            // setMessage('Failed to reset password. Please try again.');
         }
     };
 

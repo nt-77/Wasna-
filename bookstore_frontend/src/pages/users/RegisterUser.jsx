@@ -87,7 +87,7 @@ const RegisterUser = () => {
     };
     setLoading(true);
     axios
-      .post("http://localhost:5000/api/user/register", data)
+      .post("http://localhost:5000/api/user/register", data,{withCredentials:true})
       .then(() => {
         setLoading(false);
         enqueueSnackbar("user registered successfully", { variant: "success" });
