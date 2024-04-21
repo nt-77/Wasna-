@@ -47,11 +47,11 @@ router.post('/register', async (req, res) => {
 
         //generate HTTP-only cookie
         res.cookie('token', token,{
-            path:'/',
+            // path:'/',
             httpOnly:true,
-            expires: new Date(Date.now() + 1000* 86400),
-            sameSite:'none',
-            secure:true
+            // expires: new Date(Date.now() + 1000* 86400),
+            // sameSite:'none',
+            // secure:true
         })
             console.log(token);
         
@@ -91,18 +91,24 @@ router.post('/login',async (req,res)=>{
 
         //check for password
         const correctPassword = await bycrypt.compare(password, user.password);
+        if (!correctPassword) {
+            // If password is incorrect, do not generate token or set cookie
+            return res.status(400).send({ message: 'Invalid email or password.' });
+        }
+        // if(correctPassword && user){       
+             const token=generateToken(user._id)
 
+            //generate HTTP-only cookie
+            res.cookie('token', token,{
+                // path:'/',
+                httpOnly:true,
+                // expires: new Date(Date.now() + 1000* 86400),
+                // sameSite:'none',
+                // secure:false
+            })
+        // }
         //generate token
-        const token=generateToken(user._id)
 
-        //generate HTTP-only cookie
-        res.cookie('token', token,{
-            // path:'/',
-            httpOnly:true,
-            // expires: new Date(Date.now() + 1000* 86400),
-            // sameSite:'none',
-            // secure:false
-        })
 
         if (user && correctPassword) {
             const {_id, name, email, photo, bio}=user;
@@ -117,7 +123,7 @@ router.post('/login',async (req,res)=>{
             return res.status(200).send(login);
         }
         else{
-            return res.status(400).send({ message: 'invalid email or password' });
+            return res.status(400).send({ message: 'Invalid email or password' });
 
         }
     }catch (error) {
@@ -146,6 +152,16 @@ router.get('/logout',async (req,res)=>{
     }
 })
 
+//to check user login
+router.get('/',protect, async (req, res)=>{
+try{
+    const user=req.user;
+    return res.status(200).send(user)
+}catch(error) {
+    return res.status(400).send({message:error.message})
+}
+
+})
 router.get('/getuser',protect, async (req, res)=>{
     try {
         //will access the propertied from the user that i have fetched in the protect middleware
@@ -154,6 +170,7 @@ router.get('/getuser',protect, async (req, res)=>{
 
         //will access the propertied from the user that i have fetched in the protect middleware
         const user=req.user;
+ 
 
         if(user){
             const {_id, name, email, bio}=user;
@@ -285,6 +302,10 @@ router.post('/resetpassword', async (req, res) => {
 
     try {
         const { token, newPassword } = req.body;
+        console.log(newPassword);
+        if(newPassword.length < 6){
+            return res.status(400).send({ message: 'password must be atleast 6 characters' });
+        }
 
         console.log(token);
         console.log(newPassword);
@@ -297,7 +318,7 @@ router.post('/resetpassword', async (req, res) => {
         console.log(user);
 
         if (!user) {
-            return res.status(400).json({ error: "Invalid or expired password reset token." });
+            return res.status(400).json({ message: "Invalid or expired password reset token." });
         }
 
         // Update user's password and clear the reset token
@@ -317,8 +338,19 @@ router.post('/resetpassword', async (req, res) => {
         res.json({ message: "Password has been reset successfully." });
     } catch (error) {
         console.error("Password reset failed", error.message);
-        res.status(500).json({ error: "An error occurred while resetting the password." });
+        res.status(500).json({ message: error.message });
     }
 });
+
+//check login
+router.get('/autheriseUSer', (req, res) => {
+    const { token } = req.cookies; // Ensure you are using cookie-parser or similar middleware
+    if (token) {
+        return res.status(200).send({ message: 'user autherised' });
+        //   res.json({ valid: true, data: decoded });
+     } else {
+      res.status(401).send({ message: 'Unauthorized: No token provided' });
+    }
+  });
 // module.exports=router;
 export default router;

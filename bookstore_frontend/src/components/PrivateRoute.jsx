@@ -35,15 +35,24 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import Spinner from './Spinner';
+
 
 const PrivateRoute = ({ children }) => {
   const { currentUser } = useAuth();
 
+  // if (currentUser === false) {
+  //   // User not logged in, redirect to login page
+  //   return <Navigate to="/login" />;
+  // }
+
   if (currentUser === null) {
-    // User not logged in, redirect to login page
+    // Authentication status is unknown, maybe show a loading spinner or return null
+    return <Spinner />; // Or return null or another placeholder
+  } else if (currentUser === false) {
+    // Definitely unauthenticated
     return <Navigate to="/login" />;
   }
-
   return children;
 };
 
