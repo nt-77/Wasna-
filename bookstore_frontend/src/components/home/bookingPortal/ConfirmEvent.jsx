@@ -1,15 +1,25 @@
 import { useEffect } from "react";
 import { useSnackbar } from "notistack";
 import axios from "axios";
-const ConfirmEvent =({updateEventDetails,eventDetails})=>{
+const ConfirmEvent =({decor,customMenu})=>{
     const { enqueueSnackbar } = useSnackbar();
-    useEffect(() => {
-        // Call the function here if it should run when the component mounts
-        updateEventDetails();
-    }, []);
+    // useEffect(() => {
+    //     // Call the function here if it should run when the component mounts
+    //     updateEventDetails(decor,customMenu);
+    //     console.log("event details before saving",eventDetails);
+    // }, []);
+    // console.log("eventdetailsBeforeFinalSubmit",eventDetails);
 
     const submit = async() =>{
         try {
+          console.log("decor",decor);
+          console.log("customMenu",customMenu);
+          const eventDetails = { // Directly construct the details here
+            decor: decor,
+            customMenu: customMenu
+        };
+        console.log("eventdetailsBeforeFinalSubmit",eventDetails);
+        
             await axios.post("http://localhost:5000/event", eventDetails,{
                 withCredentials: true,
               });

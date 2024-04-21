@@ -1,5 +1,5 @@
 // BookingForm.js
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -9,22 +9,20 @@ import ConfirmEvent from "./ConfirmEvent";
 
 const BookingForm = () => {
   const [step, setStep] = useState(1);
-  const [customMenus, setCustomMenus] = useState("");
+  const [customMenu, setCustomMenu] = useState("");
   const [decor, setDecor] = useState({});
 
-  const [eventDetails, setEventDetails] = useState({
+  // const [eventDetails, setEventDetails] = useState({});
 
-});
+// const updateEventDetails = (d,c) => {
+//   setEventDetails({
+//       customMenu:c,
+//       decor: d
+//   });
+//   console.log("eventDetails",eventDetails);
+// };
 
-const updateEventDetails = () => {
-  setEventDetails({
-      customMenus: customMenus,
-      decor: decor
-  });
-  console.log("eventDetails",eventDetails);
-};
-
-  console.log(decor);
+  // console.log(decor);
   const [formData, setFormData] = useState({
     name: "",
     contactNumber: "",
@@ -67,7 +65,7 @@ const updateEventDetails = () => {
             handleChange={handleChange}
             nextStep={nextStep}
             prevStep={prevStep}
-            customMenu={setCustomMenus}
+            setCustomMenu={setCustomMenu}
           />
         );
       case 3:
@@ -90,9 +88,10 @@ const updateEventDetails = () => {
     <div>
       <Logout />
       {getStepComponent()}
-      {!isObjectEmpty(decor) && <ConfirmEvent updateEventDetails={updateEventDetails} eventDetails={eventDetails}/>}
+      {!isObjectEmpty(decor) && <ConfirmEvent customMenu={customMenu} decor={decor} />}
     </div>
   );
 };
 
 export default BookingForm;
+//66187bd10fe1810e165d82cf

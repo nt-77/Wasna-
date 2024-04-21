@@ -93,7 +93,7 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Step3 from "../Step3";
 
-const MenuCustomization = ({ selectedMenu ,setIsCustomized}) => {
+const MenuCustomization = ({ selectedMenu ,setIsCustomized,setCustomMenu}) => {
   const [selections, setSelections] = useState({});
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -121,6 +121,9 @@ const MenuCustomization = ({ selectedMenu ,setIsCustomized}) => {
       enqueueSnackbar('Please select at least one option for each item type.', { variant: 'warning' });
       return; // Stop the confirmation process if validation fails
     }
+    // // setCustomizeMenuId(selectedMenu[0]._id)
+    // setCustomMenu(selectedMenu[0])
+    // console.log("selectedMenu[0]._id",selectedMenu[0]._id);
     const customizedMenuData = {
       title: selectedMenu[0].title,
       category: selectedMenu[0].category,
@@ -130,7 +133,8 @@ const MenuCustomization = ({ selectedMenu ,setIsCustomized}) => {
         item_type: itemType,
         options: options
 
-      })),        // items: Object.entries(selections).map(([itemType, options]) => ({
+      })), 
+      // items: Object.entries(selections).map(([itemType, options]) => ({
       //   item_type: itemType,
       //   option: options
       // })),
@@ -138,10 +142,16 @@ const MenuCustomization = ({ selectedMenu ,setIsCustomized}) => {
 
 
     try {
-      await axios.post("http://localhost:5000/customMenu", customizedMenuData);
+      const response = await axios.post("http://localhost:5000/customMenu", customizedMenuData);
       enqueueSnackbar('Menu customized successfully', { variant: 'success' });
       // Use navigate to redirect after successful customization
       // navigate("/bookingPortal/decor"); // Adjust "/success-route" as needed
+      // {selectedMenu[0].items.map((item)=>(
+      //   // console.log("idCheck",item._id)
+      //   setCustomMenu(item._id)
+      // ))}
+      setCustomMenu(response.data._id)
+      console.log("response",response.data._id);
       setIsCustomized(true); 
     } catch (error) {
       console.error(error);

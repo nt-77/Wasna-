@@ -7,7 +7,7 @@ import Title from "./FoodSection.jsx/Title";
 import Menu from "./FoodSection.jsx/Menu";
 import Step3 from "./Step3";
 
-const Step2 = ({ data, handleChange, nextStep, prevStep,customMenu ,setDecor}) => {
+const Step2 = ({ data, handleChange, nextStep, prevStep,setCustomMenu ,setDecor}) => {
   const [categories, setCategories] = useState([]);
   const [showMenuCustomization, setMenuCustomization] = useState(false);
   const [customizeMenuId, setCustomizeMenuId] = useState([]);
@@ -64,7 +64,7 @@ const Step2 = ({ data, handleChange, nextStep, prevStep,customMenu ,setDecor}) =
                 <h2>Step 2: Decor Selection</h2>
           <Title text="our menu" />
           <Categories categories={categories} filterItems={filterItems}  setMenuCustomization={setMenuCustomization}/>
-          <Menu setIsCustomized={setIsCustomized} items={filteredMenuItems} showMenuCustomization={showMenuCustomization} setMenuCustomization={setMenuCustomization} setCustomizeMenuId={setCustomizeMenuId} customizeMenuId={customizeMenuId} customMenu={customMenu}/>
+          <Menu setIsCustomized={setIsCustomized} items={filteredMenuItems} showMenuCustomization={showMenuCustomization} setMenuCustomization={setMenuCustomization} setCustomizeMenuId={setCustomizeMenuId} customizeMenuId={customizeMenuId} setCustomMenu={setCustomMenu}/>
           <div className="flex justify-between p-5">
         <button
           onClick={prevStep}

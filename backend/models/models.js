@@ -194,12 +194,12 @@ const MenuSchema = mongoose.Schema(
   const EventSchema = new mongoose.Schema({
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'user',
       required: true
     },
-    customMenus: {
+    customMenu: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'CustomMenu'
+      ref: 'customMenu'
     }, // Embed custom menus directly
     decor: {
       category: String,
