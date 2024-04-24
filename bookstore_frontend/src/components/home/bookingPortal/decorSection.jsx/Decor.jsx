@@ -14,17 +14,20 @@ console.log("decor on decor page",decor);
     } 
   return (
     <div className="">
+      <div className="flex justify-end p-2 pr-10">
+            <button 
+      type='button'
+      onClick={() => handleClick()}
+      className="hover:bg-blue-600 rounded px-4 py-2 bg-blue-400 text-white ">
+        Select decor
+      </button>
+      </div>
               {/* <h2>{price}</h2> */}
       {/* {items.map((decorItem) => { */}
         <DecorItem  item={items} />;
       {/* })} */}
 
-      <button 
-      type='button'
-      onClick={() => handleClick()}
-      className="hover:bg-blue-600 rounded px-4 py-2 bg-blue-400 text-white ">
-        click me
-      </button>
+
     </div>
   );
 };

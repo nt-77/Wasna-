@@ -17,7 +17,7 @@ router.post('/',protect, async (req, res) => {
     console.log("user",user);
 
     console.log(req.body);
-    const {  customMenu, decor } = req.body;
+    const {  customMenu, decor,eventDate,venue,name,contactNumber,email,guests,event_type, eventTime} = req.body;
     console.log("customMenu",customMenu);
   
     try {
@@ -26,7 +26,14 @@ router.post('/',protect, async (req, res) => {
         user: user._id,
         customMenu: customMenu, // This is an array of custom menu objects
         decor: decor, // This is the ID of the chosen decor
-        // venue
+        name:name,
+        contactNumber:contactNumber,
+        email:email,
+        venue:venue,
+        eventDate: new Date(eventDate),
+        guests: guests,
+        event_type: event_type,
+        eventTime: eventTime
       });
   
       // Save the event to the database

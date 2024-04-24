@@ -16,6 +16,7 @@ const Step1 = ({ data, handleChange, nextStep }) => {
   } = data;
   const [selectedVenues, setSelectedVenues] = useState(initialSelectedVenues);
   const [errors, setErrors] = useState({});
+  const [newEventDate,setNewEventData]=useState()
 
   const validateForm = () => {
     const errors = {};
@@ -92,7 +93,23 @@ const Step1 = ({ data, handleChange, nextStep }) => {
       : [...selectedVenues, venue];
 
     setSelectedVenues(updatedVenues);
+    console.log("updatedVenues",updatedVenues);
+    handleChange("venue", updatedVenues);
+  
   };
+
+  const handleChangeOfDate = (field, value) => {
+
+        const isoDateString = value.toISOString().split('T')[0]; // Convert date object to ISO string.
+
+        setNewEventData(prevState => ({
+            ...prevState,
+            [field]: isoDateString
+        }));
+
+        handleChange("eventDate", isoDateString);
+  };
+
   return (
     <div className="max-w-md mx-auto my-8">
       <h2 className="text-2xl font-bold mb-4">Step 1: User Information</h2>
@@ -170,16 +187,62 @@ const Step1 = ({ data, handleChange, nextStep }) => {
           >
             Type of Event
           </label>
-          <input
-            type="text"
-            id="event_type"
-            name="event_type"
-            value={event_type}
-            onChange={(e) => handleChange("event_type", e.target.value)}
-            className={`mt-1 p-2 w-full border rounded-md ${
-              errors.event_type && "border-red-500"
-            }`}
-          />
+          <div>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                value="Barat"
+                checked={event_type === "Barat"}
+                onChange={() => handleChange("event_type", "Barat")}
+              />
+              <span className="ml-2">Barat</span>
+            </label>
+
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                value="Walima"
+                checked={event_type === "Walima"}
+                onChange={() => handleChange("event_type", "Walima")}
+              />
+              <span className="ml-2">Walima</span>
+            </label>
+
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                value="Dholki"
+                checked={event_type === "Dholki"}
+                onChange={() => handleChange("event_type", "Dholki")}
+              />
+              <span className="ml-2">Dholki</span>
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                value="Mehndi"
+                checked={event_type === "Mehndi"}
+                onChange={() => handleChange("event_type", "Mehndi")}
+              />
+              <span className="ml-2">Mehndi</span>
+            </label>
+
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                value="other"
+                checked={event_type === "other"}
+                onChange={() => handleChange("event_type", "other")}
+              />
+              <span className="ml-2">other</span>
+            </label>
+          </div>
+
           {errors.event_type && (
             <p className="text-red-500 text-xs mt-1">{errors.event_type}</p>
           )}
@@ -195,7 +258,7 @@ const Step1 = ({ data, handleChange, nextStep }) => {
           <DatePicker
             id="eventDate"
             selected={eventDate}
-            onChange={(date) => handleChange("eventDate", date)}
+            onChange={(date) => handleChangeOfDate("eventDate", date)}
             className={`mt-1 p-2 w-full border rounded-md ${
               errors.eventDate && "border-red-500"
             }`}

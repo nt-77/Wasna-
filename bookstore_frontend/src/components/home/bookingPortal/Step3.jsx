@@ -1,4 +1,4 @@
-// Step1.js (similar structure for Step2 and Step3)
+
 import React, { useState, useEffect }from 'react';
 import Spinner from '../../Spinner';
 import axios from 'axios';
@@ -9,13 +9,11 @@ import Decor from './decorSection.jsx/Decor';
 const Step3 = ({ data, handleChange, prevStep,setDecor }) => {
 
   const [categories, setCategories] = useState([]);
-  // console.log("decor onstep 3",decor);
 
   const [loading, setLoading] = useState(false);
 
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
   const [menuItems, setMenuItems] = useState([]);
-  const [price,setPrice]=useState('')
 
   useEffect(() => {
     setLoading(true);
@@ -24,7 +22,6 @@ const Step3 = ({ data, handleChange, prevStep,setDecor }) => {
       .then((response) => {
         const decorData = response.data.data;
         setFilteredMenuItems(decorData);
-        // console.log("flter",filteredMenuItems);
         setMenuItems(decorData);
         const allCategories = [
           ...new Set(decorData.map((item) => item.category)),
@@ -40,21 +37,20 @@ const Step3 = ({ data, handleChange, prevStep,setDecor }) => {
 
 
   const filterItems = (category) => {
-    // let newPrice;
-  
+
     const newItems = menuItems.filter((item) => item.category === category);
     setFilteredMenuItems(newItems);
-    console.log("newItems",newItems);
+    // console.log("newItems",newItems);
   
   };
   
 
-  useEffect(() => {
-    console.log("Categories:", categories);
-  }, [categories]);
-  // console.log("filtered items",filteredMenuItems);
+  // useEffect(() => {
+  //   console.log("Categories:", categories);
+  // }, [categories]);
+
   const decor_items=filteredMenuItems[0]
-  console.log("decor_items",decor_items);
+  // console.log("decor_items",decor_items);
 
 
   return (
