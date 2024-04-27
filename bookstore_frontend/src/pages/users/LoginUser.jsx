@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Spinner from "../../components/Spinner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Navigate } from "react-router-dom";
 import loginImage from "../../assets/loginImage.svg";
+import {useAuth} from '../../auth/AuthContext'
 
 import axios from "axios";
 
 const LoginUser = () => {
+  const { isManager ,setCurrentUser,setIsManager} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,10 +28,24 @@ const LoginUser = () => {
       .post("http://localhost:5000/api/user/login", data, {
         withCredentials: true,
       })
-      .then(() => {
+      .then((res) => {
         setLoading(false);
+        // console.log(res);
         enqueueSnackbar("user login successful", { variant: "success" });
-        navigate("/bookingPortal");
+        setCurrentUser(true)
+        if(res.data._id === '660be24a40c10013b3f044b2'){
+          setIsManager(true)
+        }
+        // console.log("isManager",isManager);
+        // if (isManager){
+        //   // navigate("/");
+        //   <Navigate to='/'/>
+        // }else{
+        //   // navigate("/bookingPortal");
+
+        //   <Navigate to='/bookingPortal'/>
+
+        // }
       })
       .catch((error) => {
         console.log(error);

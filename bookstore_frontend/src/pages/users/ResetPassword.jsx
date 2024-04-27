@@ -65,15 +65,19 @@ import axios from 'axios';
 import forgotPassword from "../../assets/forgot_password.svg";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import {useAuth} from '../../auth/AuthContext'
 import { useSnackbar } from "notistack";
+import Spinner from '../../components/Spinner'
 
 const ResetPassword = () => {
+  const { isManager ,setCurrentUser,setIsManager} = useAuth();
     
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
     const [newPassword, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
         const getTokenFromUrl = () => {
         return new URLSearchParams(location.search).get('token');
@@ -93,18 +97,27 @@ const ResetPassword = () => {
         }
 
         try {
-           
+            setLoading(true);
             const token = getTokenFromUrl();
-            await axios.post('http://localhost:5000/api/user/resetpassword', { token, newPassword }, { withCredentials: true });
-            if (newPassword < 6 || confirmPassword < 6) {
-                // setMessage('Passwords do no<6t match.');
-                return;
-            }
+            await axios.post('http://localhost:5000/api/user/resetpassword', { token, newPassword }, { withCredentials: true })
+            // if (newPassword < 6 || confirmPassword < 6) {
+            //     // setMessage('Passwords do no<6t match.');
+            //     return;
+            // }
+            .then((res) => {
+                setLoading(false);
+                console.log(res);
+                enqueueSnackbar("user login successful", { variant: "success" });
+                setCurrentUser(true)
+                if(res.data.user._id === '660be24a40c10013b3f044b2'){
+                  setIsManager(true)
+                }
     
         enqueueSnackbar("Your password has been successfully reset", { variant: "success" });
-        navigate("/bookingPortal");
+        // navigate("/bookingPortal");
 
             // setMessage('Your password has been successfully reset.');
+        })
         } catch (error) {
             enqueueSnackbar(`Error:  ${error.response.data.message}`, {
                 variant: "error",
@@ -115,7 +128,9 @@ const ResetPassword = () => {
 
     return (
             <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen p-4 lg:m-14">
-
+       {loading && (
+        <Spinner/>
+    )}
       <img
         src={forgotPassword}
         alt="Login Visual"

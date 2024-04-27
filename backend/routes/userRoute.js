@@ -2,6 +2,7 @@ import express from 'express'
 import {User} from '../models/models.js'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config';
+// import jwtDecode from 'jwt-decode';
 import bycrypt from 'bcryptjs'
 import protect from '../middleWare/authMiddleWare.js';
 import nodemailer from'nodemailer';
@@ -269,9 +270,11 @@ router.post('/forgotpassword',async(req, res)=>{
         const token=generateToken(user._id)
 
         console.log("Generated token:", token); // Log the generated token
-        const expirationTime = 3600000; // 1 hour in milliseconds
+        // const expirationTime = 3600000; // 1 hour in milliseconds
+        const expires = Date.now() + 24*60*60*1000;
+
         user.resetPasswordToken = token;
-        user.resetPasswordTokenExpires = Date.now() + expirationTime;
+        user.resetPasswordTokenExpires =expires;
         await user.save();
 
         console.log("User saved:", user); // Log the saved user
@@ -309,13 +312,14 @@ router.post('/resetpassword', async (req, res) => {
 
         console.log(token);
         console.log(newPassword);
+        const expires = Date.now() + 24*60*60*1000;
         // Validate token and find user. This part depends on how you've implemented token generation and storage.
         // For the sake of this example, let's assume the token is stored in the user document and you have a method to validate it.
         const user = await User.findOne({
-            resetPasswordToken: token,
-            resetPasswordTokenExpires: { $gt: Date.now() }
+            resetPasswordToken: token
+            // resetPasswordTokenExpires: expires
         });
-        console.log(user);
+        console.log("user",user);
 
         if (!user) {
             return res.status(400).json({ message: "Invalid or expired password reset token." });
@@ -325,17 +329,20 @@ router.post('/resetpassword', async (req, res) => {
         user.password = newPassword;
                 //generate HTTP-only cookie
                 res.cookie('token', user.resetPasswordToken,{
-                    path:'/',
+                    // path:'/',
                     httpOnly:true,
-                    expires: new Date(Date.now() + 1000* 86400),
-                    sameSite:'none',
-                    secure:false
+                    // expires: new Date(Date.now() + 1000* 86400),
+                    // sameSite:'none',
+                    // secure:false
                 })
         user.resetPasswordToken = null; // Or null, to clear the token
+        user.resetPasswordTokenExpires = null; // Or null, to clear the token
                 
         await user.save();
+        console.log(user);
+
         // Respond to the request
-        res.json({ message: "Password has been reset successfully." });
+        res.json({user,message: "Password has been reset successfully." });
     } catch (error) {
         console.error("Password reset failed", error.message);
         res.status(500).json({ message: error.message });
@@ -345,9 +352,15 @@ router.post('/resetpassword', async (req, res) => {
 //check login
 router.get('/autheriseUSer', (req, res) => {
     const { token } = req.cookies; // Ensure you are using cookie-parser or similar middleware
+    console.log("working");
     if (token) {
-        return res.status(200).send({ message: 'user autherised' });
+        // const decodedId = jwtDecode(token);
+        // console.log("decodedId",decodedId);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("decoded", decoded.id);
+        return res.status(200).send(decoded);
         //   res.json({ valid: true, data: decoded });
+ 
      } else {
       res.status(401).send({ message: 'Unauthorized: No token provided' });
     }

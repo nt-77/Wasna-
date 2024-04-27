@@ -58,13 +58,20 @@ import ForgotPassword from './pages/users/ForgotPassword';
 import ResetPassword from './pages/users/ResetPassword';
 import Step3 from './components/home/bookingPortal/Step3'
 import Home from './pages/Home'
+import Dashboard from './components/managerView/Dashboard';
+import MainDashboard from './components/managerView/MainDashboard';
+import DeleteDecor from './pages/decor/DeleteDecor';
+import ShowDecor from './pages/decor/ShowDecor';
+import CreateDecorItem from './pages/decor/CreateDecorItem';
+import EditDecor from './pages/decor/EditDecor';
+import { Navigate } from 'react-router-dom';
+
 
 
 // Import other components
 
 // Define a component for handling protected routes
 // const ProtectedRoutes = () => {
-//   const { user } = useAuth();
 //   const navigate = useNavigate();
 
 //   return (
@@ -91,25 +98,76 @@ import Home from './pages/Home'
 //   );
 // }
 function App() {
+  const { currentUser,isManager } = useAuth();
+
   return (
-    <AuthProvider>
-      {/* <Router> */}
+
         <Routes>
-          <Route path="/login" element={<LoginUser />} />
-          <Route path="/register" element={<RegisterUser />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/resetpassword" element={<ResetPassword />} />
-          <Route path="/fetchuser" element={<PrivateRoute><GetUser /></PrivateRoute>} />
-          <Route path="/bookingPortal" element={<PrivateRoute><BookingForm /></PrivateRoute>} />
-          <Route path="/UpdateUserProfile" element={<PrivateRoute><UpdateUserProfile /></PrivateRoute>} />
-          <Route path='/bookingPortal/decor' element={<PrivateRoute><Step3/></PrivateRoute>}/>
-          <Route path="/changeUserPassword" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
-          {/* Add more routes as needed */}
           <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={currentUser ? <Navigate to="/bookingPortal" /> : <Navigate to="/login" />} /> */}
+        <Route path="/login" element={!currentUser  ? <LoginUser /> : (isManager  ? <Navigate to="/dashboard" /> : <Navigate to="/bookingPortal" />)} />
+        <Route path="/bookingPortal" element={currentUser && !isManager ? <BookingForm /> : <Navigate to="/login" />} />
+        <Route path="/dashboard" element={currentUser && isManager? <MainDashboard /> : <Navigate to="/login" />}/>
+        <Route path="/register" element={!currentUser  ? <RegisterUser /> : (isManager  ? <Navigate to="/dashboard" /> : <Navigate to="/bookingPortal" />)} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword" element={!currentUser  ? <ResetPassword /> : (isManager  ? <Navigate to="/dashboard" /> : <Navigate to="/bookingPortal" />)} />
+        <Route path="/changeUserPassword" element={<ChangePassword />} />
+        <Route path="/decor/details/:id" element={currentUser  && isManager? <ShowDecor />: <Navigate to="/login" />} />
+        <Route path="/decor/delete/:id" element={currentUser  && isManager? <DeleteDecor /> : <Navigate to="/login" />} />
+        <Route path="/decor/create" element={currentUser  && isManager? <CreateDecorItem />: <Navigate to="/login" />} />
+        <Route path="/decor/edit/:id" element={currentUser  && isManager? <EditDecor />: <Navigate to="/login" />}/>
         </Routes>
-      {/* </Router> */}
-    </AuthProvider>
+
   );
 }
 export default App;
 
+
+{/* <Routes>
+<Route path="/" element={currentUser ? <Navigate to="/bookingPortal" /> : <Navigate to="/login" />} />
+<Route path="/login" element={!currentUser ? <LoginUser /> : <Navigate to="/bookingPortal" />} />
+<Route path="/bookingPortal" element={currentUser ? <BookingForm /> : <Navigate to="/login" />} />
+</Routes> */}
+
+    {/* </AuthProvider> */}
+
+    //     <AuthProvider>
+    //   {/* <Router> */}
+    //     <Routes>
+    //     <Route path="/" element={currentUser ? <Navigate to="/bookingPortal" /> : <Navigate to="/login" />} />
+    //     <Route path="/login" element={!currentUser ? <LoginUser /> : <Navigate to="/bookingPortal" />} />
+    //     <Route path="/bookingPortal" element={currentUser ? <BookingForm /> : <Navigate to="/login" />} />
+    //     </Routes>
+    //   {/* </Router> */}
+    // </AuthProvider>
+
+
+    // <Routes>
+    // <Route path="/" element={currentUser ? <Navigate to="/bookingPortal" /> : <Navigate to="/login" />} />
+    // <Route path="/login" element={!currentUser  ? <LoginUser /> : (isManager === 'true' ? <Navigate to="/dashboard" /> : <Navigate to="/bookingPortal" />)} />
+    // <Route path="/bookingPortal" element={currentUser && isManager === 'false' ? <BookingForm /> : <Navigate to="/login" />} />
+    // <Route path="/dashboard" element={currentUser && isManager === 'true'? <MainDashboard /> : <Navigate to="/login" />}/>
+    // </Routes>
+
+
+
+        // <AuthProvider>
+
+        // <Routes>
+        //   <Route path="/login" element={<LoginUser />} />
+        //   <Route path="/register" element={<RegisterUser />} />
+        //   <Route path="/forgotpassword" element={<ForgotPassword />} />
+        //   <Route path="/resetpassword" element={<ResetPassword />} />
+        //   <Route path="/fetchuser" element={<PrivateRoute><GetUser /></PrivateRoute>} />
+        //   <Route path="/bookingPortal" element={<PrivateRoute><BookingForm /></PrivateRoute>} />
+        //   <Route path="/UpdateUserProfile" element={<PrivateRoute><UpdateUserProfile /></PrivateRoute>} />
+        //   <Route path='/bookingPortal/decor' element={<PrivateRoute><Step3/></PrivateRoute>}/>
+        //   <Route path="/changeUserPassword" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
+        //   <Route path="/decor/details/:id" element={<PrivateRoute><ShowDecor /></PrivateRoute>} />
+        //   <Route path="/decor/delete/:id" element={<PrivateRoute><DeleteDecor /></PrivateRoute>} />
+        //   <Route path="/decor/create" element={<PrivateRoute><CreateDecorItem /></PrivateRoute>} />
+        //   <Route path="/decor/edit/:id" element={<PrivateRoute><EditDecor /></PrivateRoute>} />
+        //   {/* Add more routes as needed */}
+        //   <Route path="/" element={<Home />} />
+        //   <Route path="/dashboard" element={<MainDashboard/>}/>
+        // </Routes>

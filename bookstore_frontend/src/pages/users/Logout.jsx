@@ -3,8 +3,10 @@ import axios from 'axios';
 // import { useHistory } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import {useAuth} from '../../auth/AuthContext'
 
 const Logout = () => {
+  const { setCurrentUser} = useAuth();
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -25,6 +27,7 @@ const Logout = () => {
     .then(() => {
       enqueueSnackbar('user logout successfully',{variant:'success'})
       navigate("/login");
+      setCurrentUser(false)
     })
     .catch((error) => {
       console.log(error);

@@ -68,8 +68,11 @@ import registerImage from "../../assets/registerImage.svg";
 import { MdOutlineMail } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
+import {useAuth} from '../../auth/AuthContext'
 
 const RegisterUser = () => {
+  const { isManager ,setCurrentUser,setIsManager} = useAuth();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,7 +94,8 @@ const RegisterUser = () => {
       .then(() => {
         setLoading(false);
         enqueueSnackbar("user registered successfully", { variant: "success" });
-        navigate("/bookingPortal");
+        setCurrentUser(true)
+        // navigate("/bookingPortal");
       })
       .catch((error) => {
         console.log(error);
