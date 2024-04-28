@@ -1,8 +1,10 @@
 // Step1.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { format } from "date-fns";
 const Step1 = ({ data, handleChange, nextStep }) => {
   const {
     name,
@@ -14,76 +16,117 @@ const Step1 = ({ data, handleChange, nextStep }) => {
     selectedVenues: initialSelectedVenues = [],
     eventTime,
   } = data;
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const [selectedVenues, setSelectedVenues] = useState(initialSelectedVenues);
   const [errors, setErrors] = useState({});
-  const [newEventDate,setNewEventData]=useState()
+  const [newEventDate, setNewEventData] = useState();
+  const [eventTimeselection, setEventTimeSelection] = useState();
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  const checkAvailability = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/event/check-availability",
+        {
+          newEventDate,
+          selectedVenues,
+          eventTimeselection,
+        }
+      );
+      const available = response.data.isAvailable;
+      setIsAvailable(available);
+    } catch (error) {
+      console.error("Error checking availability:", error);
+    }
+  };
+  useEffect(() => {
+    // Check if there are any errors, if not and a submit flag is set, proceed to next step
+    console.log("errors", errors);
+    if (Object.keys(errors).length === 0 && submitAttempted) {
+      nextStep();
+    }
+  }, [errors]); // Dependency on errors state
+
+  useEffect(() => {
+    if (newEventDate && selectedVenues.length > 0 && eventTimeselection) {
+      console.log("newEventDate", newEventDate);
+      console.log("selectedVenues", selectedVenues);
+      console.log("eventTimeselection", eventTimeselection);
+      checkAvailability();
+    }
+  }, [newEventDate, selectedVenues, eventTimeselection]);
 
   const validateForm = () => {
     const errors = {};
+    // Clear previous errors
+    setErrors({});
 
-    if (!name.trim()) {
+    if (!isAvailable) {
+      errors.venueAvailability =
+        "Selected venue is not available. Please choose another venue or date.";
+      enqueueSnackbar("Venue is not available for the selected date and time", {
+        variant: "error",
+      });
+    }
+    if (!name) {
       errors.name = "Name is required";
+      enqueueSnackbar("Name is required", { variant: "error" });
     }
-
-    if (!contactNumber.trim()) {
+    if (!contactNumber) {
       errors.contactNumber = "Contact Number is required";
+      enqueueSnackbar("Contact Number is required", { variant: "error" });
+    } else if (contactNumber.length !== 11 || !/^\d+$/.test(contactNumber)) {
+      errors.contactNumber = "Contact Number must be exactly 11 digits";
+      enqueueSnackbar("Contact Number must be exactly 11 digits", {
+        variant: "error",
+      });
     }
 
-    if (!email.trim()) {
+    if (!email) {
       errors.email = "Email is required";
-    }
-    if (!event_type.trim()) {
-      errors.event_type = "Event type is required";
+      enqueueSnackbar("Email is required", { variant: "error" });
     }
 
     if (!eventDate) {
       errors.eventDate = "Date of Event is required";
+      enqueueSnackbar("Date of Event is required", { variant: "error" });
     }
 
     if (!guests) {
       errors.guests = "Number of Guests is required";
+      enqueueSnackbar("Number of Guests is required", { variant: "error" });
     } else if (guests > 500 && selectedVenues.length < 2) {
       errors.guests = "For more than 500 guests, select at least two venues";
+      enqueueSnackbar("For more than 500 guests, select at least two venues", {
+        variant: "error",
+      });
     } else if (guests <= 500 && selectedVenues.length > 1) {
       errors.guests = "For 500 or fewer guests, select only one venue";
+      enqueueSnackbar("For 500 or fewer guests, select only one venue", {
+        variant: "error",
+      });
     }
 
     if (selectedVenues.length === 0) {
       errors.venue = "At least one venue is required";
+      enqueueSnackbar("At least one venue is required", { variant: "error" });
     }
 
     if (!eventTime) {
       errors.eventTime = "Time of Event is required";
+      enqueueSnackbar("Time of Event is required", { variant: "error" });
     }
 
     setErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
-  // const handleNext = () => {
-  //   if (validateForm()) {
-  //     nextStep();
-  //   }
-  // };
-
   const handleNext = () => {
+    setSubmitAttempted(true);
     if (validateForm()) {
-      // Check if the selected date, time, and venue combination is already booked
-      const isBookingConflict =
-        eventTime === "Lunch" && selectedVenues.includes("Marquee 1");
-
-      if (isBookingConflict) {
-        setErrors({
-          bookingConflict:
-            "This date and time for Marquee 1 is already booked.",
-        });
-      } else {
-        // Clear the booking conflict error if not applicable
-        setErrors({});
-
-        // Proceed to the next step
-        nextStep();
-      }
+      nextStep();
     }
   };
 
@@ -93,23 +136,36 @@ const Step1 = ({ data, handleChange, nextStep }) => {
       : [...selectedVenues, venue];
 
     setSelectedVenues(updatedVenues);
-    console.log("updatedVenues",updatedVenues);
+    console.log("updatedVenues", updatedVenues);
     handleChange("venue", updatedVenues);
-  
   };
+
+  const handleTimeSelection = (time) => {
+    setEventTimeSelection(time);
+    handleChange("eventTime", time);
+  };
+
+  // const handleChangeOfDate = (field, value) => {
+  //   const isoDateString = value.toISOString().split("T")[0]; // Convert date object to ISO string.
+  //   setNewEventData(isoDateString);
+
+  //   handleChange(field, isoDateString);
+  // };
 
   const handleChangeOfDate = (field, value) => {
-
-        const isoDateString = value.toISOString().split('T')[0]; // Convert date object to ISO string.
-
-        setNewEventData(prevState => ({
-            ...prevState,
-            [field]: isoDateString
-        }));
-
-        handleChange("eventDate", isoDateString);
+    if (value) {
+      // Format the date to an ISO8601 string (yyyy-MM-dd)
+      const formattedDate = format(value, "yyyy-MM-dd");
+      console.log("formattedDate", formattedDate);
+      setNewEventData(formattedDate);
+      handleChange(field, formattedDate);
+    }
   };
-
+  // const oneWeekFromToday = new Date();
+  // oneWeekFromToday.setDate(oneWeekFromToday.getDate() + 7);
+  
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 7);
   return (
     <div className="max-w-md mx-auto my-8">
       <h2 className="text-2xl font-bold mb-4">Step 1: User Information</h2>
@@ -131,9 +187,6 @@ const Step1 = ({ data, handleChange, nextStep }) => {
               errors.name && "border-red-500"
             }`}
           />
-          {errors.name && (
-            <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-          )}
         </div>
 
         <div className="mb-4">
@@ -153,9 +206,6 @@ const Step1 = ({ data, handleChange, nextStep }) => {
               errors.contactNumber && "border-red-500"
             }`}
           />
-          {errors.contactNumber && (
-            <p className="text-red-500 text-xs mt-1">{errors.contactNumber}</p>
-          )}
         </div>
 
         <div className="mb-4">
@@ -175,9 +225,6 @@ const Step1 = ({ data, handleChange, nextStep }) => {
               errors.email && "border-red-500"
             }`}
           />
-          {errors.email && (
-            <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-          )}
         </div>
 
         <div className="mb-4">
@@ -255,17 +302,25 @@ const Step1 = ({ data, handleChange, nextStep }) => {
           >
             Date of Event
           </label>
-          <DatePicker
+
+          {/* <DatePicker
             id="eventDate"
             selected={eventDate}
             onChange={(date) => handleChangeOfDate("eventDate", date)}
             className={`mt-1 p-2 w-full border rounded-md ${
               errors.eventDate && "border-red-500"
             }`}
+            minDate={tomorrow}
+          /> */}
+          <DatePicker
+            id="eventDate"
+            selected={eventDate ? new Date(eventDate) : null}
+            onChange={(date) => handleChangeOfDate("eventDate", date)}
+            className={`mt-1 p-2 w-full border rounded-md ${
+              errors.eventDate && "border-red-500"
+            }`}
+            minDate={tomorrow}
           />
-          {errors.eventDate && (
-            <p className="text-red-500 text-xs mt-1">{errors.eventDate}</p>
-          )}
         </div>
 
         <div className="mb-4">
@@ -312,9 +367,6 @@ const Step1 = ({ data, handleChange, nextStep }) => {
               <span className="ml-2">Lawn</span>
             </label>
           </div>
-          {errors.venue && (
-            <p className="text-red-500 text-xs mt-1">{errors.selectedVenues}</p>
-          )}
         </div>
 
         <div className="mb-4">
@@ -328,7 +380,8 @@ const Step1 = ({ data, handleChange, nextStep }) => {
                 className="form-radio text-blue-500"
                 value="Lunch"
                 checked={eventTime === "Lunch"}
-                onChange={() => handleChange("eventTime", "Lunch")}
+                onChange={() => handleTimeSelection("Lunch")}
+                // onChange={() => handleChange("eventTime", "Lunch")}
               />
               <span className="ml-2">Lunch</span>
             </label>
@@ -339,14 +392,11 @@ const Step1 = ({ data, handleChange, nextStep }) => {
                 className="form-radio text-blue-500"
                 value="Dinner"
                 checked={eventTime === "Dinner"}
-                onChange={() => handleChange("eventTime", "Dinner")}
+                onChange={() => handleTimeSelection("Dinner")}
               />
               <span className="ml-2">Dinner</span>
             </label>
           </div>
-          {errors.eventTime && (
-            <p className="text-red-500 text-xs mt-1">{errors.eventTime}</p>
-          )}
         </div>
 
         <div className="mb-6">
@@ -366,18 +416,10 @@ const Step1 = ({ data, handleChange, nextStep }) => {
               errors.guests && "border-red-500"
             }`}
           />
-          {errors.guests && (
-            <p className="text-red-500 text-xs mt-1">{errors.guests}</p>
-          )}
         </div>
-        {errors.bookingConflict && (
-          <p className="text-red-500 text-xs mt-1">{errors.bookingConflict}</p>
-        )}
         <button
           type="button"
           onClick={handleNext}
-          // className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
-          disabled={Object.keys(errors).length > 0} // Disable the button if there are errors
           className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
         >
           Next

@@ -57,5 +57,56 @@ router.post('/',protect, async (req, res) => {
     }
   });
   
+  router.delete('/:id',protect, async function (req, res) {
+    
+
+    try {
+//       const {id}=req.params;
+// const deleteEvent= await Event.findByIdAndDelete(id)
+// if(!deleteEvent){
+//   return res.status(404).send({message:'book not found'})
+// }
+// return res.status(200).send({message:'book deleted successfuly'})
+const { id } = req.params;
+
+// First, find the event to access the customMenu ID
+const eventToDelete = await Event.findById(id);
+
+if (!eventToDelete) {
+    return res.status(404).send({ message: 'Event not found' });
+}
+
+// If there is a customMenu associated with the event, delete it
+if (eventToDelete.customMenu) {
+    await CustomMenu.findByIdAndDelete(eventToDelete.customMenu);
+}
+
+// Now delete the event itself
+await Event.findByIdAndDelete(id);
+
+return res.status(200).send({ message: 'Event and associated custom menu deleted successfully' });
+  } catch (error) {
+      console.log(error);
+      return res.status(500). send({message:error.messsage})
+  }
+  })
+
+  router.post('/check-availability', async function (req, res){
+    const { newEventDate, selectedVenues, eventTimeselection } = req.body;
+    console.log("newEventDate",newEventDate);
+    console.log("selectedVenues",selectedVenues);
+    console.log("eventTimeselection",eventTimeselection);
+  try {
+    const events = await Event.find({
+      eventDate:newEventDate,
+      venue: { $in: selectedVenues }, // Check for any of the venues being booked
+      eventTime:eventTimeselection
+    });
+    const isAvailable = events.length === 0; // If no events found, venue is available
+    res.json({ isAvailable });
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+  })
   
 export default router;
