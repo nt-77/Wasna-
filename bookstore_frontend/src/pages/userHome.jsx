@@ -58,48 +58,63 @@
 // };
 
 // export default Home;
-import wedding from "../assets/wedding.svg"
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from '../nav/Navbar'
-import Footer from '../footer/Footer'
+import userDashboard from "../assets/userDashboard.svg";
+import ShowUserEvents from "../pages/events/ShowUserEvents";
+import axios from "axios";
+import Navbar from "../nav/Navbar";
+import Footer from '../footer/Footer';
 
-const Home = () => {
+const UserHome = () => {
+  const [showEvents, setShowEvents] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get("http://localhost:5000/event/myevents", { withCredentials: true })
+      .then((response) => {
+        setEvents(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, []);
   const navigate = useNavigate();
 
   const navigateToLogin = () => {
-  
-      navigate("/Login"); // Navigate to the booking portal route
-    };
-
-  // navigate("/bookingPortal"); // Navigate to the booking portal route
+    navigate("/bookingPortal"); // Navigate to the booking portal route
+  };
   return (
-  <>
-<Navbar/>
-
-    <div className="flex flex-col md:flex-row min-h-screen">
-    <div className="md:w-1/2 flex justify-center items-center p-10">
-      {/* Text content on the right half */}
-      <div>
-        <h1 className="text-5xl font-bold mb-4 text-gray-800">Dream Weddings Made Simple</h1>
-        <p className="mb-4 text-gray-600">
-          Congratulations, you're getting married! This is a time for joy, so definitely take it all in – make it a smoother process with joining hands with us.
-        </p>
-        <button  onClick={navigateToLogin} className="bg-blue-400 text-white py-2 px-4 rounded-xl hover:bg-blue-600 transition duration-300">
-          Book Event
-        </button>
+    <>
+    <Navbar />
+    <div className="bg-white p-6 ">
+      <div className="flex pb-8 justify-center items-center ml-20 mt-10 ">
+        <img src={userDashboard} alt="Bride" className="w-[45rem] h-auto" />
+        <div className="ml-10 p-5 rounded bg-white bg-opacity-75 text-gray-700">
+          <h1 className="text-5xl font-bold font-roboto pb-4">Plan And Book</h1>
+          <div className="flex">
+            <div className="title-underline bg-blue-500 w-20 h-1 mx-auto mt-4 mr-3"></div>
+            <h1 className="text-5xl font-bold font-roboto">Your Wedding</h1>
+          </div>
+          <div className="flex mt-4 justify-center">
+            <button
+              onClick={navigateToLogin}
+              className="mt-4 px-4 py-2 bg-blue-400 text-white rounded-lg shadow animated-grow hover:bg-blue-600"
+            >
+              Start Now
+            </button>
+          </div>
+        </div>
       </div>
+      {events.length > 0 && <ShowUserEvents events={events} />}
     </div>
-    <div className="md:w-1/2 flex justify-center items-center bg-blue-400 p-10">
-      {/* Background on the left half with #60A5FA shade */}
-      <img src={wedding} alt="Bride" className="max-w-xs md:max-w-md lg:max-w-lg rounded-lg transform translate-x-1/12" />
-    </div>
-  </div>
-  <Footer/>
-  </>
-
+    <Footer/>
+    </>
   );
 };
 
-
-
-export default Home;
+export default UserHome;

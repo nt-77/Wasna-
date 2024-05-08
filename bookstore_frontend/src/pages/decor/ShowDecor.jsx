@@ -4,12 +4,14 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import Spinner from '../../components/Spinner'
 import BackButton from '../../components/BackButton'
+import Navbar from '../../nav/Navbar'
+import Footer from '../../footer/Footer'
 
 const ShowDecor = () => {
-  const [decor,setDecor]=useState([])
+  const [decor,setDecor]=useState(null)
   const [loading,setLoading]=useState(false)
   const {id} = useParams()
-  const formetedId= id.substring(1)
+  const formetedId= id.substring(0)
 useEffect(()=>{
   setLoading(true)
   console.log(formetedId);
@@ -24,9 +26,18 @@ useEffect(()=>{
   setLoading(true)
  })
 },[])
-
+if (!decor) {
   return (
     <div className='p-4'>
+      <BackButton />
+    <Spinner/>
+    </div>
+  );
+}
+  return (
+    <>
+    <Navbar/>
+        <div className='p-4'>
       <BackButton/>
       <h1 className='text-3xl my-4'>
         Show Decor
@@ -40,26 +51,26 @@ useEffect(()=>{
             <span>{decor._id}</span>
             </div>
             <div className='p-4'>
-            <span className='text-xl mr-4 text-gray-500'>Name</span>
-            <span>{decor.name}</span>
+            <span className='text-xl mr-4 text-gray-500'>Category</span>
+            <span>{decor.category}</span>
             </div>
             <div className='p-4'>
-            <span className='text-xl mr-4 text-gray-500'>Item Type</span>
-            <span>{decor.item_type}</span>
-            </div>
-            <div className='p-4'>
-            <span className='text-xl mr-4 text-gray-500'>Quantity</span>
-            <span>{decor.quantity}</span>
+            <span className='text-xl mr-4 text-gray-500'>Price</span>
+            <span>Rs {decor.price}</span>
             </div>
             <div className='p-4'>
             <span className='text-xl mr-4 text-gray-500'>Image</span>
-            {decor.image?.data && (
-                <img
-                    src={`data:${decor.image.contentType};base64,${decor.image.data}`}
-                    alt={decor.name}
-                    className="w-1/5 h-auto"
-                />
-                )}
+                  <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4'>
+        {decor.images.map((image) => (
+          <div key={image._id} className="p-2 border rounded shadow">
+            <img
+              src={image.img_url}
+              alt={image.imageName} // Use imageName as alt text
+              className="w-full h-auto" // Use full width of the parent container, height auto for aspect ratio
+            />
+          </div>
+           ))}
+           </div>
             </div>
             <div className='p-4'>
             <span className='text-xl mr-4 text-gray-500'>Created at</span>
@@ -73,6 +84,8 @@ useEffect(()=>{
           
       )}
     </div>
+    <Footer/>
+    </>
   )
 }
 

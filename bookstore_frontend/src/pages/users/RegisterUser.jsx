@@ -69,6 +69,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import {useAuth} from '../../auth/AuthContext'
+import Footer from '../../footer/Footer'
 
 const RegisterUser = () => {
   const { isManager ,setCurrentUser,setIsManager} = useAuth();
@@ -112,6 +113,7 @@ const RegisterUser = () => {
 
   return (
     // <div className="flex h-screen flex-col lg:flex-row ">
+    <>
     <div className="flex flex-col lg:flex-row h-screen">
       {/* Image container */}
       {/* <div className="lg:w-2/5 w-full flex justify-center  items-center bg-cover"> */}
@@ -209,6 +211,8 @@ const RegisterUser = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
-const DecorModal = ({ book, onClose, index }) => {
+const EventModal = ({ book, onClose, index }) => {
   return (
     <div
       className="fixed bg-opacity-60 z-50 top-0 bottom-0 left-0 right-0 bg-black flex items-center justify-center"
@@ -47,4 +47,4 @@ const DecorModal = ({ book, onClose, index }) => {
   );
 };
 
-export default DecorModal;
+export default EventModal;

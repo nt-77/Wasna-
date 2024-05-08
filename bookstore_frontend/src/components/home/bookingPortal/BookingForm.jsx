@@ -5,6 +5,7 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Logout from "../../../pages/users/Logout";
 import ConfirmEvent from "./ConfirmEvent";
+import Navbar from '../../../nav/Navbar'
 // import Confirmation from './Confirmation';
 
 const BookingForm = () => {
@@ -24,14 +25,14 @@ const BookingForm = () => {
 
   // console.log(decor);
   const [formData, setFormData] = useState({
-    // name: "",
-    // contactNumber ,
-    // email: "",
-    // eventDate: "",
-    // venue: "",
-    // guests: "",
-    // event_type: "",
-    // eventTime: ""
+    name: "",
+    contactNumber:"" ,
+    email: "",
+    eventDate: "",
+    venue: "",
+    guests: "",
+    event_type: "",
+    eventTime: ""
   });
   const isObjectEmpty = (obj) => {
     return Object.keys(obj).length === 0;
@@ -83,7 +84,7 @@ const BookingForm = () => {
 
   return (
     <div>
-      <Logout />
+      <Navbar/>
       {getStepComponent()}
       {!isObjectEmpty(decor) && <ConfirmEvent customMenu={customMenu} decor={decor} formData={formData} />}
     </div>

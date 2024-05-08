@@ -6,7 +6,7 @@ import { useSnackbar } from "notistack";
 import {useAuth} from '../../auth/AuthContext'
 
 const Logout = () => {
-  const { setCurrentUser} = useAuth();
+  const { setCurrentUser,setIsManager} = useAuth();
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -26,7 +26,11 @@ const Logout = () => {
     .get("http://localhost:5000/api/user/logout",{withCredentials:true})
     .then(() => {
       enqueueSnackbar('user logout successfully',{variant:'success'})
-      navigate("/login");
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('isManager');
+      // setCurrentUser(false);
+      // setIsManager(false);
+      navigate("/");
       setCurrentUser(false)
     })
     .catch((error) => {
@@ -37,7 +41,7 @@ const Logout = () => {
   };
 
   return (
-    <button onClick={handleLogout}>Logout</button>
+    <button onClick={handleLogout} className='text-blue-400 hover:text-blue-600 font-bold'>Logout</button>
   );
 };
 

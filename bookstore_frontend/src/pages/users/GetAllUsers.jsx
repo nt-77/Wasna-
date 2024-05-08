@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { MdOutlineAddBox } from "react-icons/md";
-import DecorTableDisplay from "../../components/home/decor/DecorTableDisplay";
+import UserTableDisplay from "../../components/home/user/UserTableDisplay";
 import DecorCardDisplay from "../../components/home/decor/DecorCardDisplay";
+import { BsTruckFlatbed } from "react-icons/bs";
+import BackButton from "../../components/BackButton";
 
 const Home = () => {
   const [items, setItems] = useState([]);
@@ -13,7 +15,9 @@ const Home = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/decor/")
+      .get("http://localhost:5000/api/user/getAll",{
+        withCredentials:true
+      })
       .then((response) => {
         console.log("response.data.data",response.data.data);
         setItems(response.data.data);
@@ -27,33 +31,19 @@ const Home = () => {
   }, []);
   return (
     <div className="p-4">
+      <BackButton/>
+
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Decor List</h1>
-        <Link to="http://localhost:5173/decor/create">
-          <MdOutlineAddBox className="text-sky-800 text-4xl" />
-        </Link>
+        <h1 className="text-3xl my-8">User List</h1>
       </div>
       {loading ? (
         <Spinner />
       ) : showCard ? (
         <DecorCardDisplay books={items}  />
       ) : (
-        <DecorTableDisplay books={items} />
+        <UserTableDisplay books={items} />
       )}
-      <div className=" flex items-center gap-x-4 justify-left pl-2">
-        <button
-          onClick={() => setShowCard(true)}
-          className="bg-sky-300 rounded-lg py-1 px-4 hover:bg-sky-500"
-        >
-          Card View
-        </button>
-        <button
-          onClick={() => setShowCard(false)}
-          className="bg-sky-300 rounded-lg py-1 px-4 hover:bg-sky-500"
-        >
-          Table View
-        </button>
-      </div>
+
     </div>
   );
 };

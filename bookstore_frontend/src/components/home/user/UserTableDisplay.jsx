@@ -9,9 +9,10 @@ const TableDisplay = ({ books }) => {
       <thead>
         <tr>
           <th className="border border-slate-600 rounded-md">No</th>
-          <th className="border border-slate-600 rounded-md">Decor Type</th>
+          <th className="border border-slate-600 rounded-md">ID</th>
+          <th className="border border-slate-600 rounded-md">Name</th>
           <th className="border border-slate-600 rounded-md max-md:hidden">
-            Price
+            Email
           </th>
           {/* <th className="border border-slate-600 rounded-md max-md:hidden">
             Quantity
@@ -30,10 +31,13 @@ const TableDisplay = ({ books }) => {
               {index + 1}
             </td>
             <td className="border border-slate-700 rounded-md text-center">
-              {book.category}
+              {book._id}
+            </td>  
+            <td className="border border-slate-700 rounded-md text-center">
+              {book.name}
             </td>
             <td className="border border-slate-700 rounded-md text-center max-md:hidden">
-              {book.price}
+              {book.email}
             </td>
             {/* <td className="border border-slate-700 rounded-md text-center max-md:hidden">
               {book.quantity}
@@ -52,10 +56,7 @@ const TableDisplay = ({ books }) => {
                 <Link to={`/decor/details/${book._id}`}>
                   <BsInfoCircle className="text-2x1 text-green-800" />
                 </Link>
-                <Link to={`/decor/edit/:${book._id}`}>
-                  <AiOutlineEdit className="text-2x1 text-yellow-800" />
-                </Link>
-                <Link to={`/decor/delete/:${book._id}`}>
+                <Link to={`/user/delete/:${book._id}`}>
                   <MdOutlineDelete className="text-2x1 text-red-800" />
                 </Link>
               </div>

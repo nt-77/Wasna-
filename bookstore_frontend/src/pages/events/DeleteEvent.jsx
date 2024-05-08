@@ -5,7 +5,7 @@ import { useSnackbar } from "notistack";
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const DeleteDecor = () => {
+const DeleteEvent = () => {
   const [Loading,setLoading]=useState(false)
 
   const { enqueueSnackbar } = useSnackbar();
@@ -14,14 +14,16 @@ const DeleteDecor = () => {
   const newId=id.substring(1)
   const handleDelete=()=>{
     setLoading(true)
-    axios.delete(`http://localhost:5000/decor/${newId}`)
+    axios.delete(`http://localhost:5000/event/${newId}`, {
+        withCredentials: true,
+      })
     .then(()=>{
       setLoading(false)
-        enqueueSnackbar("Item deleted successfully", { variant: "success" });
+        enqueueSnackbar("Event deleted successfully", { variant: "success" });
         navigate('/dashboard')
     })
     .catch((error)=>{
-        enqueueSnackbar("Could not delete item", { variant: "error" });
+        enqueueSnackbar("Could not delete Event", { variant: "error" });
         console.log(error);
       setLoading(false)
     })
@@ -43,4 +45,4 @@ const DeleteDecor = () => {
   )
 }
 
-export default DeleteDecor
+export default DeleteEvent

@@ -22,9 +22,8 @@ const EditDecor = () => {
     axios
       .get(`http://localhost:5000/decor/${newId}`)
       .then((response) => {
-        setName(response.data.name);
-        setItem_type(response.data.item_type);
-        setQuantity(response.data.quantity);
+        setName(response.data.category);
+        setItem_type(response.data.price);
         setLoading(false);
       })
       .catch((error) => {
@@ -78,7 +77,7 @@ const EditDecor = () => {
       {loading ? <Spinner /> : ""}
       <div className="border-2 flex flex-col border-sky-400 rounded-xl w-[600px] p-4 mx-auto">
         <div className="p-4">
-          <label className="text-gray-500 mr-4 text-xl">Name</label>
+          <label className="text-gray-500 mr-4 text-xl">Category</label>
           <input
             className="border-2 border-gray-500 px-4 py-2 w-full"
             type="text"
@@ -87,21 +86,12 @@ const EditDecor = () => {
           />
         </div>
         <div className="p-4">
-          <label className="text-gray-500 mr-4 text-xl">Item Type</label>
+          <label className="text-gray-500 mr-4 text-xl">Price</label>
           <input
             className="border-2 border-gray-500 px-4 py-2 w-full"
             type="text"
             onChange={(e) => setItem_type(e.target.value)}
             value={item_type}
-          />
-        </div>
-        <div className="p-4">
-          <label className="text-gray-500 mr-4 text-xl">Quantity</label>
-          <input
-            className="border-2 border-gray-500 px-4 py-2 w-full"
-            type="number"
-            onChange={(e) => setQuantity(e.target.value)}
-            value={quantity}
           />
         </div>
         <div className="p-4">

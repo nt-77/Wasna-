@@ -131,16 +131,31 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).send({ message: "decor item not found" });
     }
 
-    const image = deleteItem.images;
+    // const image = deleteItem.images;
 
-    const getObjectParams = {
-      Bucket: bucketName,
-      Key: image,
-    };
+    // const getObjectParams = {
+    //   Bucket: bucketName,
+    //   Key: image,
+    // };
 
-    const command = new DeleteObjectCommand(getObjectParams);
+    // const command = new DeleteObjectCommand(getObjectParams);
+    for (const image of deleteItem.images) {
+      const getObjectParams = {
+        Bucket: bucketName,
+        Key: image.imageName, // Assuming `imageName` is the key for the S3 object
+      };
+    
+      const command = new DeleteObjectCommand(getObjectParams);
+      try {
+        await s3.send(command);
+      } catch (error) {
+        console.error('Error deleting image from S3:', error);
+        // Optionally break the loop or handle the error differently
+      }
 
-    await s3.send(command);
+    }
+
+    // await s3.send(command);
 
     const delete_Item = await Decor.findByIdAndDelete(id);
     if (!delete_Item) {
@@ -155,17 +170,81 @@ router.delete("/:id", async (req, res) => {
 });
 
 //update a decor in the database
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.array("images", 10),async (req, res) => {
   try {
     const { id } = req.params;
     const item = await Decor.findById(id);
-    const { _id, name, item_type, quantity, image } = item;
+    const { _id, category, price, images } = item;
 
+    // for (const image of images) {
+    //   const getObjectParams = {
+    //     Bucket: bucketName,
+    //     Key: image.imageName, // Assuming `imageName` is the key for the S3 object
+    //   };
+    
+    //   const command = new DeleteObjectCommand(getObjectParams);
+    //   try {
+    //     await s3.send(command);
+    //   } catch (error) {
+    //     console.error('Error deleting image from S3:', error);
+    //     // Optionally break the loop or handle the error differently
+    //   }
+    // }
     if (item) {
-      item.name = req.body.name || name;
-      item.item_type = req.body.item_type || item_type;
-      item.quantity = req.body.quantity || quantity;
-      item.image = req.body.image || image;
+      // item.category = req.body.category || category;
+      // item.price = req.body.price || price;
+      // item.images = req.body.image || image;
+      if (req.body.imagesToDelete && req.body.imagesToDelete.length) {
+        for (const image of item.images) {
+          const getObjectParams = {
+            Bucket: bucketName,
+            Key: image.imageName, // Assuming `imageName` is the key for the S3 object
+          };
+        
+          const command = new DeleteObjectCommand(getObjectParams);
+          try {
+            await s3.send(command);
+          } catch (error) {
+            console.error('Error deleting image from S3:', error);
+            // Optionally break the loop or handle the error differently
+          }
+    
+        }
+        for (const file of req.files) {
+    
+        const imageName = randomImageName();
+        const params = {
+          Bucket: bucketName,
+          Key: imageName, // Use a unique key for each image
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        };
+  
+        await s3.send(new PutObjectCommand(params));
+  
+        const getObjectParams = {
+          Bucket: bucketName,
+          Key: imageName,
+        };
+  
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command);
+        const baseUrl = url.split('?')[0];
+        
+        uploadedImages.push({ img_url: baseUrl, imageName: imageName });
+      
+  
+      }
+        // const item = {
+          item.category = req.body.category || category;
+          item.price = req.body.price || price;
+          item.images= uploadedImages;
+        // };
+      } else{
+        item.category = req.body.category || category;
+        item.price = req.body.price || price;
+      }
+
     }
     const result = await Decor.findByIdAndUpdate(id, item);
     if (!result) {
@@ -218,6 +297,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("_id",id);
     const item = await Decor.findById(id);
 
     return res.status(200).json(item);

@@ -86,7 +86,11 @@ const { enqueueSnackbar } = useSnackbar();
         );
       }
     };
-
+    const user = localStorage.getItem('currentUser');
+    const manager = localStorage.getItem('isManager') === 'true'; // LocalStorage stores everything as string
+    setCurrentUser(user);
+    setIsManager(manager);
+    // verifyUser(); 
     verifyUser();
   }, []);
 

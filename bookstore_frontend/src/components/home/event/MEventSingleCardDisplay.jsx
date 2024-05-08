@@ -5,9 +5,12 @@ import { MdOutlineDelete } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import DecorModal from "./DecorModal";
+import EventModal from "./EventModal";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
+import { SlCalender } from "react-icons/sl";
+import { IoLocationOutline } from "react-icons/io5";
+import { IoMdTime } from "react-icons/io";
 // eslint-disable-next-line react/prop-types
 const BookSingleCard = ({ book ,index}) => {
   const [show, setShow] = useState(false);
@@ -24,27 +27,31 @@ const BookSingleCard = ({ book ,index}) => {
         </div>
       </div>
       <div className="flex flex-col gap-y-3 pl-3 pb-4 ">
-        <div className="flex gap-x-1 items-center">
-          <BiCategoryAlt className="text-blue-400 text-xl" />
-          <p className="pl-3">{book.category}</p>
+        <div className="flex gap-x-2 items-center">
+          <SlCalender className="text-blue-400 text-xl" />
+          <p className="pl-3">{book.bookingDate}</p>
         </div>
         <div className="flex gap-x-2 items-center pb-4">
-        <IoPricetagsOutline className="text-blue-400 text-xl" />
-          <p className="pl-2">{book.price}</p>
+        <IoLocationOutline className="text-blue-400 text-xl" />
+          <p className="pl-2">{book.venue}</p>
+        </div>
+        <div className="flex gap-x-2 items-center pb-4">
+        <IoMdTime className="text-blue-400 text-xl" />
+          <p className="pl-2">{book.eventTime}</p>
         </div>
         <div className="flex justify-center gap-x-20 ">
           <BiShow
             className="text-2xl text-sky-800 cursor-pointer"
             onClick={() => setShow(true)}
           /> 
-          {show && <DecorModal book={book} index={index +1} onClose={()=>setShow(false)}/>}
+          {show && <EventModal book={book} index={index +1} onClose={()=>setShow(false)}/>}
           <Link to={`/decor/details/${book._id}`}>
             <BsInfoCircle className="text-2xl text-green-800" />
           </Link>
           <Link to={`/decor/edit/:${book._id}`}>
             <AiOutlineEdit className="text-2xl text-yellow-800" />
           </Link>
-          <Link to={`/decor/delete/:${book._id}`}>
+          <Link to={`/event/delete/:${book._id}`}>
             <MdOutlineDelete className="text-2xl text-red-800" />
           </Link>
          </div>

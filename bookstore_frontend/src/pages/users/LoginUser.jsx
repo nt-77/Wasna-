@@ -5,7 +5,8 @@ import Spinner from "../../components/Spinner";
 import { useNavigate,Navigate } from "react-router-dom";
 import loginImage from "../../assets/loginImage.svg";
 import {useAuth} from '../../auth/AuthContext'
-
+import Navbar from "../../nav/Navbar";
+import Footer from '../../footer/Footer'
 import axios from "axios";
 
 const LoginUser = () => {
@@ -32,18 +33,32 @@ const LoginUser = () => {
         setLoading(false);
         // console.log(res);
         enqueueSnackbar("user login successful", { variant: "success" });
-        setCurrentUser(true)
-        if(res.data._id === '660be24a40c10013b3f044b2'){
-          setIsManager(true)
+        if (res.data._id === '660be24a40c10013b3f044b2') { // Assume this ID means the user is a manager
+          localStorage.setItem('currentUser', 'true');
+          localStorage.setItem('isManager', 'true');
+          setCurrentUser(true);
+          setIsManager(true);
+          navigate('/dashboard');
+        } else {
+          console.log("Setting user in local storage");
+          localStorage.setItem('currentUser', 'true');
+          localStorage.setItem('isManager', 'false');
+          setCurrentUser(true);
+          setIsManager(false);
+          navigate('/userdashboard');
         }
+        // setCurrentUser(true)
+        // if(res.data._id === '660be24a40c10013b3f044b2'){
+        //   setIsManager(true)
+        // }
         // console.log("isManager",isManager);
         // if (isManager){
         //   // navigate("/");
-        //   <Navigate to='/'/>
+        //   <Navigate to='/dashboard'/>
         // }else{
         //   // navigate("/bookingPortal");
 
-        //   <Navigate to='/bookingPortal'/>
+        //   <Navigate to='/userdashboard'/>
 
         // }
       })
@@ -57,10 +72,8 @@ const LoginUser = () => {
   };
 
   return (
-  // loading ? (
-  //   <Spinner />
-  // ) : (
-    
+    <>
+      <Navbar/>
     <div>
     <div className="flex h-screen flex-col lg:flex-row ">
       {/* <div className="lg:w-4/5 flex justify-center items-center bg-white"> */}
@@ -132,6 +145,9 @@ const LoginUser = () => {
       </div>
     </div>
     </div>
+    <Footer/>
+    </>
+
     )
   // );
 };

@@ -105,7 +105,7 @@ router.post('/login',async (req,res)=>{
                 httpOnly:true,
                 // expires: new Date(Date.now() + 1000* 86400),
                 // sameSite:'none',
-                // secure:false
+                secure:false
             })
         // }
         //generate token
@@ -140,8 +140,8 @@ router.get('/logout',async (req,res)=>{
             // path:'/',
             httpOnly:true,
             expires: new Date(0),
-            sameSite:'none',
-            secure:true
+            // sameSite:'none',
+            secure:false
         })
 
         return res.status(200).send({ message: "user successfuly logged out" });
@@ -333,7 +333,7 @@ router.post('/resetpassword', async (req, res) => {
                     httpOnly:true,
                     // expires: new Date(Date.now() + 1000* 86400),
                     // sameSite:'none',
-                    // secure:false
+                    secure:false
                 })
         user.resetPasswordToken = null; // Or null, to clear the token
         user.resetPasswordTokenExpires = null; // Or null, to clear the token
@@ -350,8 +350,8 @@ router.post('/resetpassword', async (req, res) => {
 });
 
 //check login
-router.get('/autheriseUSer', (req, res) => {
-    const { token } = req.cookies; // Ensure you are using cookie-parser or similar middleware
+router.get('/autheriseUSer',protect, (req, res) => {
+    const { token } = req.cookies; 
     console.log("working");
     if (token) {
         // const decodedId = jwtDecode(token);
@@ -365,5 +365,33 @@ router.get('/autheriseUSer', (req, res) => {
       res.status(401).send({ message: 'Unauthorized: No token provided' });
     }
   });
+
+  router.get("/getAll", async (req, res) => {
+    try {
+      const users = await User.find({});
+      return res.status(200).json({
+        count: User.length,
+        data: users,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ message: error.message });
+    }
+  });
+
+  router.delete('/:id',async(req,res)=>{
+    try {
+        const {id}=req.params;
+const deleteBook= await User.findByIdAndDelete(id)
+if(!deleteBook){
+    return res.status(404).send({message:'User not found'})
+}
+return res.status(200).send({message:'User deleted successfuly'})
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500). send({message:error.messsage})
+    }
+})
 // module.exports=router;
 export default router;

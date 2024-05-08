@@ -1,3 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+wght@400;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.font-roboto {
+    font-family: 'Times New Roman', sans-serif;
+}
+@keyframes grow {
+    0%, 100% {
+        transform: scale(1); /* Original size */
+    }
+    50% {
+        transform: scale(1.1); /* 10% larger */
+    }
+}
+
+.animated-grow {
+    animation: grow 2s infinite; /* Complete cycle duration is 4s */
+}
+
+@font-face {
+    font-family: 'Algerian';
+    src: url('/path-to-your-fonts/Algerian.ttf') format('truetype'); /* Adjust the path as necessary */
+    font-weight: normal;
+    font-style: normal;
+}
+.font-algerian {
+    font-family: 'Algerian', serif; /* Fallback to serif if Algerian is not available */
+}

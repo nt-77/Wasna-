@@ -14,14 +14,14 @@ const DeleteDecor = () => {
   const newId=id.substring(1)
   const handleDelete=()=>{
     setLoading(true)
-    axios.delete(`http://localhost:5000/decor/${newId}`)
+    axios.delete(`http://localhost:5000/api/user/${newId}`)
     .then(()=>{
       setLoading(false)
-        enqueueSnackbar("Item deleted successfully", { variant: "success" });
+        enqueueSnackbar("user deleted successfully", { variant: "success" });
         navigate('/dashboard')
     })
     .catch((error)=>{
-        enqueueSnackbar("Could not delete item", { variant: "error" });
+        enqueueSnackbar("Could not delete user", { variant: "error" });
         console.log(error);
       setLoading(false)
     })
