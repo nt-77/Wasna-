@@ -15,13 +15,13 @@ export const links = [
   },
   {
     id: 3,
-    url: '/projects',
-    text: 'projects',
+    url: '/decorOptions',
+    text: 'Our Decor',
   },
   {
     id: 4,
-    url: '/contact',
-    text: 'contact',
+    url: '/menuOptions',
+    text: 'Our Menu',
   },
   {
     id: 5,

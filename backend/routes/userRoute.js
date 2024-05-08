@@ -163,6 +163,18 @@ try{
 }
 
 })
+
+router.get('/client/:id',protect, async (req, res)=>{
+    try {
+    
+        const {id}=req.params
+        const book=await User.findById(id)
+        return res.status(200).json(book)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message:error.message});
+    }
+    })
 router.get('/getuser',protect, async (req, res)=>{
     try {
         //will access the propertied from the user that i have fetched in the protect middleware

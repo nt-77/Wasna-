@@ -71,6 +71,9 @@ import DeleteEvent from './pages/events/DeleteEvent';
 import ShowEvent from './pages/events/ShowEvent';
 import UpdateEvent from './pages/events/UpdateEvent';
 import UserDelete from './pages/users/UserDelete';
+import ShowUser from './pages/users/ShowUser';
+import Main from './components/viewDecor/Main.jsx';
+import MainMenu from './components/viewMenu/MainMenu.jsx';
 
 
 
@@ -115,6 +118,8 @@ function App() {
   return (
  <Routes>
 <Route path="/" element={<Home />} />
+<Route path="/decorOptions" element={<Main />} />
+<Route path="/menuOptions" element={<MainMenu />} />
 <Route path="/login" element={!currentUser ? <LoginUser /> : (isManager ? <Navigate to="/dashboard" /> : <Navigate to="/userdashboard" />)} />
 <Route path="/bookingPortal" element={currentUser  ? <BookingForm /> : <Navigate to="/login" />} />
 <Route path="/dashboard" element={currentUser && isManager? <MainDashboard /> : <Navigate to="/login" />}/>
@@ -124,6 +129,7 @@ function App() {
 <Route path="/changeUserPassword" element={<ChangePassword />} />
 <Route path="/decor/details/:id" element={currentUser  && isManager? <ShowDecor />: <Navigate to="/login" />} />
 <Route path="/event/details/:id" element={currentUser  && isManager? <ShowEvent />: <Navigate to="/login" />} />
+<Route path="/user/details/:id" element={currentUser  && isManager? <ShowUser />: <Navigate to="/login" />} />
 <Route path="/event/delete/:id" element={currentUser  && isManager? <DeleteEvent />: <Navigate to="/login" />} />
 <Route path="/decor/delete/:id" element={currentUser  && isManager? <DeleteDecor /> : <Navigate to="/login" />} />
 <Route path="/user/delete/:id" element={currentUser  && isManager? <UserDelete/> : <Navigate to="/login" />} />

@@ -56,7 +56,7 @@ const ShowUserEvents = () => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Decor List</h1>
+        <h1 className="text-3xl my-8">Event List</h1>
         <div className="flex justify-between items-center">
         <div className="flex justify-between items-center">
     <select

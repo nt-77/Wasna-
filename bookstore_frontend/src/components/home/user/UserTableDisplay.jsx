@@ -53,7 +53,7 @@ const TableDisplay = ({ books }) => {
           </td> */}
             <td className="border border-slate-700 rounded-md text-center">
               <div className="flex justify-center gap-x-4">
-                <Link to={`/decor/details/${book._id}`}>
+                <Link to={`/user/details/${book._id}`}>
                   <BsInfoCircle className="text-2x1 text-green-800" />
                 </Link>
                 <Link to={`/user/delete/:${book._id}`}>
