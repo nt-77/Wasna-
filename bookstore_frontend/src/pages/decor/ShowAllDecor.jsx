@@ -17,7 +17,6 @@ const Home = () => {
       .then((response) => {
         console.log("response.data.data",response.data.data);
         setItems(response.data.data);
-        // console.log(response.data.data);
         setLoading(false);
       })
       .catch((error) => {

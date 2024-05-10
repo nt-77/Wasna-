@@ -19,7 +19,7 @@ const ConfirmEvent =({decor,customMenu,formData})=>{
             await axios.post("http://localhost:5000/event/", eventDetails,{
                 withCredentials: true,
               });
-            enqueueSnackbar('Menu customized successfully', { variant: 'success' });
+            enqueueSnackbar('Event saved successfully', { variant: 'success' });
             // Use navigate to redirect after successful customization
             // navigate("/bookingPortal/decor"); // Adjust "/success-route" as needed
             

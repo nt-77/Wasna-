@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams} from 'react-router-dom';
 import Navbar from '../../nav/Navbar';
 import Footer from '../../footer/Footer'
+import BackButton from '../../components/BackButton';
 
 const UpdateEvent = () => {
     const {id}=useParams();
@@ -20,7 +21,6 @@ const UpdateEvent = () => {
         guests: '',
         event_type: '',
         eventTime: '',
-        customMenu: '',
         decor: '',
     });
 
@@ -40,7 +40,6 @@ const UpdateEvent = () => {
                 guests: res.data.guests,
                 event_type: res.data.event_type,
                 eventTime: res.data.eventTime,
-                customMenu: res.data.customMenu._id, // Assuming customMenu has an id
                 decor: res.data.decor,
             })
         }).catch(err => console.log(err));
@@ -97,6 +96,7 @@ const UpdateEvent = () => {
         <>
         <Navbar/>
         <div className="container mx-auto p-4">
+        <BackButton />
         <h2 className="text-2xl font-bold mb-4">Update Event</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
             <div>
@@ -130,10 +130,6 @@ const UpdateEvent = () => {
             <div>
                 <label htmlFor="eventTime" className="block">Event Time:</label>
                 <input type="text" id="eventTime" name="eventTime" value={formData.eventTime} onChange={handleChange} required className="border rounded p-2 w-full"/>
-            </div>
-            <div>
-                <label htmlFor="customMenu" className="block">Custom Menu ID:</label>
-                <input type="text" id="customMenu" name="customMenu" value={formData.customMenu} onChange={handleChange} className="border rounded p-2 w-full"/>
             </div>
             <div>
                 <label htmlFor="decor" className="block">Decor Category:</label>

@@ -78,24 +78,11 @@ const ShowUserEvents = () => {
       {loading ? (
         <Spinner />
       ) : showCard ? (
-        <EventCardDisplay books={filteredItems}  />
-      ) : (
         <EventTableDispaly books={filteredItems} />
+      ) : (
+        <EventCardDisplay books={filteredItems}  />
       )}
-      <div className=" flex items-center gap-x-4 justify-left pl-2">
-        <button
-          onClick={() => setShowCard(true)}
-          className="bg-sky-300 rounded-lg py-1 px-4 hover:bg-sky-500"
-        >
-          Card View
-        </button>
-        <button
-          onClick={() => setShowCard(false)}
-          className="bg-sky-300 rounded-lg py-1 px-4 hover:bg-sky-500"
-        >
-          Table View
-        </button>
-      </div>
+
     </div>
   );
 };

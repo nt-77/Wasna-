@@ -41,9 +41,9 @@ const BookSingleCard = ({ book ,index}) => {
           <Link to={`/decor/details/${book._id}`}>
             <BsInfoCircle className="text-2xl text-green-800" />
           </Link>
-          <Link to={`/decor/edit/:${book._id}`}>
+          {/* <Link to={`/decor/edit/:${book._id}`}>
             <AiOutlineEdit className="text-2xl text-yellow-800" />
-          </Link>
+          </Link> */}
           <Link to={`/decor/delete/:${book._id}`}>
             <MdOutlineDelete className="text-2xl text-red-800" />
           </Link>

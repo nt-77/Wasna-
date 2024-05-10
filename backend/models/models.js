@@ -42,17 +42,6 @@ const userSchema = mongoose.Schema(
       required: [true, "please add a password"],
       minLength: [6, "please enter a password of atleast 6 characters"],
     },
-    // bio:{
-    //     type:String,
-    //     // required:[true, 'please add bio'],
-    //     default:"bio",
-    //     maxLength:[250, "bio must not be more then 250 characters"]
-    // },
-    // photo:{
-    //     type:String,
-    //     required:[true, 'please add a photo'],
-    //     default:"https://i.ibb.co/4pDNDk1/avatar.png",
-    // },
     resetPasswordToken: { type: String },
     resetPasswordTokenExpires: { type: Date },
   },
@@ -72,24 +61,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// const decorSchema =mongoose.Schema(
-//     {
-//         category: {
-//             type: String,
-//             required: [true, 'please add a Category'],
-//           },
-//           images: {
-//             type: String,
-//             },
-//             img_url:{
-//                 type: String,
-//             }
-
-//         },
-//     {
-//         timestamps:true
-//     }
-// )
 
 const decorSchema = mongoose.Schema(
   {
@@ -141,24 +112,6 @@ const CateringSchema = mongoose.Schema(
   }
 );
 
-// Menu Schema
-// const MenuSchema = mongoose.Schema(
-//     {
-//     title: String,
-//     category: String,
-//     description: String,
-//     price: Number,
-//     items: [
-//       {
-//         item_type: String,
-//         options:
-//           [
-//             {options:{String}},
-//       ],
-
-//       },
-//     ],
-//   });
 
 const MenuSchema = mongoose.Schema({
   title: String,
@@ -216,12 +169,6 @@ const EventSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// //when storing one image in the database
-// const imageSchema = new mongoose.Schema({
-//     filename: String,
-//     contentType: String,
-//     data: Buffer,
-//   });
 
 export const Book = mongoose.model("book", bookSchema); //creating book model for database
 export const User = mongoose.model("user", userSchema); //creating book model for database

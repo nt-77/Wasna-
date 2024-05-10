@@ -45,10 +45,10 @@ const BookSingleCard = ({ book ,index}) => {
             onClick={() => setShow(true)}
           /> 
           {show && <EventModal book={book} index={index +1} onClose={()=>setShow(false)}/>}
-          <Link to={`/decor/details/${book._id}`}>
+          <Link to={`/event/details/${book._id}`}>
             <BsInfoCircle className="text-2xl text-green-800" />
           </Link>
-          <Link to={`/decor/edit/:${book._id}`}>
+          <Link to={`/event/edit/:${book._id}`}>
             <AiOutlineEdit className="text-2xl text-yellow-800" />
           </Link>
           <Link to={`/event/delete/:${book._id}`}>

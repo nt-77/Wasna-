@@ -9,11 +9,6 @@ export const links = [
     text: 'home',
   },
   {
-    id: 2,
-    url: '/about',
-    text: 'about',
-  },
-  {
     id: 3,
     url: '/decorOptions',
     text: 'Our Decor',
@@ -22,12 +17,7 @@ export const links = [
     id: 4,
     url: '/menuOptions',
     text: 'Our Menu',
-  },
-  {
-    id: 5,
-    url: '/profile',
-    text: 'profile',
-  },
+  }
 ];
 
 export const social = [

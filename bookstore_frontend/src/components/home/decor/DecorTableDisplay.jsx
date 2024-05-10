@@ -52,9 +52,9 @@ const TableDisplay = ({ books }) => {
                 <Link to={`/decor/details/${book._id}`}>
                   <BsInfoCircle className="text-2x1 text-green-800" />
                 </Link>
-                <Link to={`/decor/edit/:${book._id}`}>
+                {/* <Link to={`/decor/edit/:${book._id}`}>
                   <AiOutlineEdit className="text-2x1 text-yellow-800" />
-                </Link>
+                </Link> */}
                 <Link to={`/decor/delete/:${book._id}`}>
                   <MdOutlineDelete className="text-2x1 text-red-800" />
                 </Link>

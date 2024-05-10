@@ -68,15 +68,6 @@ const Dashboard = ({setShowDecor,setShowUser, setShowEvent}) => {
             User Settings
           </button>
         </div>
-
-        {/* Small Card for Menu */}
-        <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
-          <h3 className="font-semibold text-xl">Menu Menu</h3>
-          <p className="text-sm">Customize the menu for different events.</p>
-          <button className="mt-4 bg-blue-400 text-white py-2 px-4 rounded hover:bg-blue-600">
-            Edit Menu
-          </button>
-        </div>
       </div>
     </div>
     </>

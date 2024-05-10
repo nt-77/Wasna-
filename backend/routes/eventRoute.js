@@ -46,6 +46,47 @@ router.post('/',protect, async (req, res) => {
     }
   });
 
+  router.get('/myevents', protect, async (req, res) => {
+    const user=req.user;
+    console.log("user id", user._id.toString());
+      try {
+  
+  
+        // Assuming the user ID is stored in 'decoded.id' 
+        // Fetch events where the 'user' field matches the logged-in user's ID
+        const events = await Event.find({ user: user._id })
+                                  .populate('user')
+                                  .populate('customMenu');  // Populate these fields if needed
+  
+        res.status(200).json(events);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ message: 'Error retrieving your events', error: error.message });
+    }
+  
+    // try {
+    //     const { token } = req.cookies; 
+    //     if (!token) {
+    //         return res.status(401).send({ message: 'No token provided, user not authorized' });
+    //     }
+  
+    //     // Decode the token to get the user ID
+    //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //     console.log("decoded id", decoded._id);
+  
+    //     // Assuming the user ID is stored in 'decoded.id' 
+    //     // Fetch events where the 'user' field matches the logged-in user's ID
+    //     const events = await Event.find({ user: decoded._id })
+    //                               .populate('user')
+    //                               .populate('customMenu');  // Populate these fields if needed
+  
+    //     res.status(200).json(events);
+    // } catch (error) {
+    //     console.error("Error:", error);
+    //     res.status(500).json({ message: 'Error retrieving your events', error: error.message });
+    // }
+  });
+  
 
   router.put('/:eventId', async (req, res) => {
 
@@ -175,46 +216,6 @@ return res.status(200).send({ message: 'Event and associated custom menu deleted
 //     }
 // });
 
-router.get('/myevents', protect, async (req, res) => {
-  const user=req.user;
-  console.log("user id", user._id.toString());
-    try {
-
-
-      // Assuming the user ID is stored in 'decoded.id' 
-      // Fetch events where the 'user' field matches the logged-in user's ID
-      const events = await Event.find({ user: user._id })
-                                .populate('user')
-                                .populate('customMenu');  // Populate these fields if needed
-
-      res.status(200).json(events);
-  } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ message: 'Error retrieving your events', error: error.message });
-  }
-
-  // try {
-  //     const { token } = req.cookies; 
-  //     if (!token) {
-  //         return res.status(401).send({ message: 'No token provided, user not authorized' });
-  //     }
-
-  //     // Decode the token to get the user ID
-  //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  //     console.log("decoded id", decoded._id);
-
-  //     // Assuming the user ID is stored in 'decoded.id' 
-  //     // Fetch events where the 'user' field matches the logged-in user's ID
-  //     const events = await Event.find({ user: decoded._id })
-  //                               .populate('user')
-  //                               .populate('customMenu');  // Populate these fields if needed
-
-  //     res.status(200).json(events);
-  // } catch (error) {
-  //     console.error("Error:", error);
-  //     res.status(500).json({ message: 'Error retrieving your events', error: error.message });
-  // }
-});
 
   
 export default router;
